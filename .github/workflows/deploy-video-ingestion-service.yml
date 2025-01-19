@@ -1,0 +1,44 @@
+name: Deploy Video Ingestion Service to GCP
+
+on:
+  push:
+    branches:
+      - video-ingestion-service
+      - main
+    paths:
+      - '.video_ingestion_service/**'
+      - '.github/workflows/deploy-video-ingestion-service.yml'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Authenticate Docker with GCP
+        run: gcloud auth configure-docker
+
+      - name: Build the Docker image
+        run: |
+          cd .video_ingestion_service
+          docker build -t gcr.io/{{ secrets.GCP_PROJECT_ID }}/video-ingestion-service .
+          docker push gcr.io/{{ secrets.GCP_PROJECT_ID }}/video-ingestion-service:latest
+
+      - name: Deploy the Docker image to Cloud Run
+        run: |
+          gcloud run deploy video-ingestion-service \
+            --image gcr.io/{{ secrets.GCP_PROJECT_ID }}/video-ingestion-service:latest \
+            --platform managed \
+            --region us-central1 \
+            --allow-unauthenticated
+        
+      

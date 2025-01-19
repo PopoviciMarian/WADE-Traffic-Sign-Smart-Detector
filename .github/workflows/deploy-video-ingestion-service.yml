@@ -29,15 +29,14 @@ jobs:
 
       - name: Build the Docker image
         run: |
-          ls -l
           cd video_ingestion_service
-          docker build -t gcr.io/{{ secrets.GCP_PROJECT_ID }}/video-ingestion-service .
-          docker push gcr.io/{{ secrets.GCP_PROJECT_ID }}/video-ingestion-service:latest
+          docker build -t gcr.io/$GCP_PROJECT_ID/video-ingestion-service .
+          docker push gcr.io/$GCP_PROJECT_ID/video-ingestion-service
 
       - name: Deploy the Docker image to Cloud Run
         run: |
           gcloud run deploy video-ingestion-service \
-            --image gcr.io/{{ secrets.GCP_PROJECT_ID }}/video-ingestion-service:latest \
+            --image gcr.io/$GCP_PROJECT_ID/video-ingestion-service \
             --platform managed \
             --region us-central1 \
             --allow-unauthenticated

@@ -8,7 +8,7 @@ on:
       - video-ingestion-service
       - main
     paths:
-      - '.video_ingestion_service/**'
+      - 'video_ingestion_service/**'
       - '.github/workflows/deploy-video-ingestion-service.yml'
 
 jobs:

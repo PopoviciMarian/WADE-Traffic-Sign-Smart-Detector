@@ -1,8 +1,7 @@
 name: Deploy Video Ingestion Service to GCP
 
 env:
-  GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-
+  FULL_IMAGE_NAME: us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/docker-repo-wade-1/video-ingestion-service
 on:
   push:
     branches:
@@ -33,15 +32,14 @@ jobs:
       - name: Build the Docker image
         run: |
           cd video_ingestion_service
-          docker build -t gcr.io/$GCP_PROJECT_ID/video-ingestion-service .
-          docker push gcr.io/$GCP_PROJECT_ID/video-ingestion-service
+          docker build -t $FULL_IMAGE_NAME .
+          docker push $FULL_IMAGE_NAME
 
       - name: Deploy the Docker image to Cloud Run
         run: |
           gcloud run deploy video-ingestion-service \
-            --image gcr.io/$GCP_PROJECT_ID/video-ingestion-service \
+            --image $FULL_IMAGE_NAME \
             --platform managed \
             --region us-central1 \
             --allow-unauthenticated
-        
-      
+            

@@ -9,7 +9,7 @@ on:
       - main
     paths:
       - 'sign-detection-service/**'
-      - '.github/workflows/deploy-sign-detection-service.yml.yml'
+      - '.github/workflows/deploy-sign-detection-service.yml'
 
 jobs:
   build-and-deploy:

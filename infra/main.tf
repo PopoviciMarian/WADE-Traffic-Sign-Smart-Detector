@@ -147,3 +147,54 @@ data "google_iam_policy" "noauth3" {
   }
 }
 
+
+resource "google_cloud_run_service" "ontology-service" {
+  name     = "ontology-service"
+  location = "us-central1"
+
+  template {
+    spec {
+      containers {
+        image = "us-central1-docker.pkg.dev/${var.project_id}/docker-repo-wade-1/ontology-service:latest"
+        ports {
+          container_port = 8080
+        }
+        env {
+          name  = "BUCKET_NAME"
+          value = google_storage_bucket.video_bucket.name
+        }
+          resources {
+    limits = {
+      memory = "1Gi"
+      cpu    = "1"  # Optional: Adjust CPU allocation if needed
+      }
+  }
+      }
+    }
+  }
+
+  traffic {
+    percent         = 100
+    latest_revision = true
+  }
+
+
+
+
+}
+
+resource "google_cloud_run_service_iam_policy" "noauth3" {
+  location = google_cloud_run_service.ontology-service.location
+  service  = google_cloud_run_service.ontology-service.name
+
+
+  policy_data = data.google_iam_policy.noauth.policy_data
+}
+
+data "google_iam_policy" "noauth3" {
+  binding {
+    role    = "roles/run.invoker"
+    members = ["allUsers"]
+  }
+}
+

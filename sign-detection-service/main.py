@@ -74,7 +74,7 @@ def classify_signs(frame, rectangles):
         if predicted == 42:
             second_best_class = np.argsort(output_array, axis=1)[0, -2]
             predicted = out_dict[second_best_class]
-        result.append({'point':{'x1':x,'y1':y,'x2':x1,'y2':y1},'classId':predicted})
+        result.append({'point':{'x1':int(x),'y1':int(y),'x2':int(x1),'y2':int(y1)},'classId':int(predicted)})
 
     return result
 

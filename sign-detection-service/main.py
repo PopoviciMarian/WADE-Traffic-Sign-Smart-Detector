@@ -93,7 +93,9 @@ def detect_signs():
     """
     Endpoint for handling detection of signs in a frame
     """
-    frame_id=request.get_json['frame_id']
+    frame_id=request.get_json().get('frame_id')
+    if frame_id is None:
+        return jsonify({'message':'frame_id is required'}), 400
     frame=get_frame_by_id(frame_id)
 
     if frame is None:

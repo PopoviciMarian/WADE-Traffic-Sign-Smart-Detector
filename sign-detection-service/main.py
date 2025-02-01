@@ -9,17 +9,22 @@ import onnxruntime as ort
 import numpy as np
 import os
 
-# Configuration
+
+
+app = Flask(__name__)
+
+
 FRAME_FOLDER = "frames"
 BUCKET_NAME = os.environ.get("BUCKET_NAME")
 os.makedirs(FRAME_FOLDER, exist_ok=True)
 storage_client = storage.Client()
 
 
-app = Flask(__name__)
-
 classifiers = [
-    cv2.CascadeClassifier( f"{os.path.join(os.path.dirname(__file__), 'classifiers' , '{type_classifier}-cascade.xml')}" ) for type_classifier in['blue-circle', 'red-circle','red-triangle','slashes']
+    cv2.CascadeClassifier( os.path.join(os.path.dirname(__file__), 'classifiers' , 'blue-circle-cascade.xml') ),
+    cv2.CascadeClassifier( os.path.join(os.path.dirname(__file__), 'classifiers' , 'red-circle-cascade.xml') ),
+    cv2.CascadeClassifier( os.path.join(os.path.dirname(__file__), 'classifiers' , 'red-triangle-cascade.xml') ),
+    cv2.CascadeClassifier( os.path.join(os.path.dirname(__file__), 'classifiers' , 'slashes-cascade.xml') )
 ]
 TRANSFORM = transforms.Compose([
     transforms.Resize((32,32)),  # Resize to model input size

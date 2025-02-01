@@ -112,6 +112,12 @@ resource "google_cloud_run_service" "sign-detection-service" {
           name  = "BUCKET_NAME"
           value = google_storage_bucket.video_bucket.name
         }
+          resources {
+    limits = {
+      memory = "1Gi"
+      cpu    = "1"  # Optional: Adjust CPU allocation if needed
+      }
+  }
       }
     }
   }
@@ -120,6 +126,10 @@ resource "google_cloud_run_service" "sign-detection-service" {
     percent         = 100
     latest_revision = true
   }
+   
+
+
+
 }
 
 resource "google_cloud_run_service_iam_policy" "noauth3" {

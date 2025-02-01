@@ -89,7 +89,7 @@ def get_frame_by_id(frame_id: str):
 
 
 @app.route('/detect-signs',methods=['POST'])
-def detect_signs():
+def detect():
     """
     Endpoint for handling detection of signs in a frame
     """

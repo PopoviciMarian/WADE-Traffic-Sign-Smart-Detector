@@ -100,7 +100,7 @@ def detect():
         return jsonify({'message':'frame_id is required'}), 400
     frame=get_frame_by_id(frame_id)
 
-    if frame is None
+    if frame is None:
         return jsonify({'message':f'Frame not found for id:{frame_id}'}), 404
     detections=detect_signs(frame)
     classifications=classify_signs(frame,detections)

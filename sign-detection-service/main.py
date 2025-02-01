@@ -94,18 +94,18 @@ def detect():
     """
     Endpoint for handling detection of signs in a frame
     """
-    frame_id=request.get_json().get('frame_id')
-    if frame_id is None:
-        return jsonify({'message':'frame_id is required'}), 400
-    frame=get_frame_by_id(frame_id)
-
-    if frame is None:
-        return jsonify({'message':f'Frame not found for id:{frame_id}'}), 404
-    detections=detect_signs(frame)
-    classifications=classify_signs(frame,detections)
     try:
-        json_data = json.dumps(classifications)
-        return jsonify({'detections':json_data}), 200
+   
+        frame_id=request.get_json().get('frame_id')
+        if frame_id is None:
+            return jsonify({'message':'frame_id is required'}), 400
+        frame=get_frame_by_id(frame_id)
+
+        if frame is None:
+            return jsonify({'message':f'Frame not found for id:{frame_id}'}), 404
+        detections = detect_signs(frame)
+        classifications = classify_signs(frame, detections)
+        return jsonify({'detections': classifications}), 200
     except Exception as e:
         return jsonify({'message':str(e)}), 500
 if __name__ == '__main__':

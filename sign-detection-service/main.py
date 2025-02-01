@@ -7,18 +7,27 @@ from torchvision import transforms
 from PIL import Image
 import onnxruntime as ort
 import numpy as np
+import os
+
+# Configuration
+FRAME_FOLDER = "frames"
+BUCKET_NAME = os.environ.get("BUCKET_NAME")
+os.makedirs(FRAME_FOLDER, exist_ok=True)
+storage_client = storage.Client()
+
 
 app = Flask(__name__)
 
 classifiers = [
-    cv2.CascadeClassifier(f'./{type_classifier}-cascade.xml') for type_classifier in['blue-circle', 'red-circle','red-triangle','slashes']
+    cv2.CascadeClassifier( f"{os.path.join(os.path.dirname(__file__), 'classifiers' , '{type_classifier}-cascade.xml')}" ) for type_classifier in['blue-circle', 'red-circle','red-triangle','slashes']
 ]
 TRANSFORM = transforms.Compose([
     transforms.Resize((32,32)),  # Resize to model input size
     transforms.ToTensor(),  # Convert to Tensor (H, W, C) → (C, H, W)
     transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])  # Normalize
 ])
-session = ort.InferenceSession("./TSR_classificaton_model.onnx")
+
+session = ort.InferenceSession(os.path.join(os.path.dirname(__file__), "classifiers" ,"TSR_classification_model.onnx"))
 onnx_input_name = session.get_inputs()[0].name
 
 out_dict = {0: 0, 1: 1, 2: 10, 3: 11, 4: 12, 5: 13, 6: 14, 7: 15, 8: 16, 9: 17, 10: 18, 11: 19, 12: 2, 13: 20, 14: 21,
@@ -65,12 +74,16 @@ def classify_signs(frame, rectangles):
 
     return result
 
-def get_frame_by_id(frame_id:0):
-    #TODO: Implement search in Bitbucket for frame by id
-    return None
+def get_frame_by_id(frame_id: str):
+    bucket = storage_client.bucket(BUCKET_NAME)
+    blob = bucket.blob(frame_id)
+    frame_path = os.path.join(FRAME_FOLDER, frame_id)
+    blob.download_to_filename(frame_path)
+    frame = cv2.imread(frame_path)
+    return frame    
 
 
-@app.route('detect-signs',methods=['POST'])
+@app.route('/detect-signs',methods=['POST'])
 def detect_signs():
     """
     Endpoint for handling detection of signs in a frame

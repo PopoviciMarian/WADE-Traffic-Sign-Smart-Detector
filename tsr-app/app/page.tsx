@@ -20,18 +20,27 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (status === "authenticated") {
-      fetch("/api/videos?mode=my" )
-        .then((res) => res.json())
-        .then((data) => {
-          setVideos(data)
-          setLoading(false)
-        })
-        .catch((error) => {
-          console.error("Error fetching user videos:", error)
-          setLoading(false)
-        })
+      const fetchVideos = () => {
+        fetch("/api/videos?mode=my")
+          .then((res) => res.json())
+          .then((data) => {
+            setVideos(data);
+            setLoading(false);
+          })
+          .catch((error) => {
+            console.error("Error fetching user videos:", error);
+            setLoading(false);
+          });
+      };
+  
+      fetchVideos(); // Initial fetch
+  
+      // Poll every 10 seconds
+      const interval = setInterval(fetchVideos, 10000);
+  
+      return () => clearInterval(interval); // Cleanup on unmount
     }
-  }, [status])
+  }, [status]);
 
   const reloadVideos = () => {
     fetch("/api/videos?mode=my")

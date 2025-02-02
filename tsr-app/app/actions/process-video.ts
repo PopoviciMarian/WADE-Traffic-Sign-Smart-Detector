@@ -38,6 +38,7 @@ const signDetection = async (frameUrl: string) => {
   })
 
   if (!response.ok) {
+    console.error("Failed to detect signs")
     throw new Error("Failed to detect signs")
   }
   return (await response.json())["detections"] as any[]
@@ -52,6 +53,8 @@ export async function processVideo(videoId: string, fps: number) {
     const frameData = frames.map((frame, index) => {
       return {
         url: frame,
+        videoId,
+        index,
         detections: detections[index].map((detection: any) => {
           return {
             classId: detection.classId,

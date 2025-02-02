@@ -45,7 +45,7 @@ export function VideoGrid({ videos, isMyVideos = false }: VideoGridProps) {
         {videos.map((video) => (
           <div key={video.id}>
             {video.isProcessed ? (
-              <Link href={`/videos/${video.id}`}>
+              <Link href={`/videos/${video.videoId}`}>
                 <Card className="cursor-pointer transition-all duration-300 bg-surface-a10 dark:bg-surface-a10 relative hover:shadow-md hover:border-primary hover:border-2">
                   <CardContent className="p-4">
 

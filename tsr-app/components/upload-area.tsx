@@ -92,7 +92,7 @@ export function UploadArea({ onClose }: UploadAreaProps) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ videoId: unique_filename, videoUrl: file_url, thumbnailUrl: thumbnail_url , fps: Number(fps) }),
+        body: JSON.stringify({ videoId: unique_filename, videoUrl: file_url, thumbnailUrl: thumbnail_url , fps: Number(fps), length: videoDuration, frames: Math.ceil(videoDuration * Number(fps) ) }),
       })
 
       if (!saveResponse.ok) {

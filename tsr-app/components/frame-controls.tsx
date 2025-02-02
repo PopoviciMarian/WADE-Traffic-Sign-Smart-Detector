@@ -1,21 +1,23 @@
 "use client"
 
-import { useState } from "react"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft, ArrowRight } from "lucide-react"
 import { Slider } from "@/components/ui/slider"
 
-export function FrameControls() {
-  const [currentFrame, setCurrentFrame] = useState(0)
-  const totalFrames = 100 // This would come from your video metadata
+interface FrameControlsProps {
+  totalFrames: number
+  currentFrame: number
+  onFrameChange: (frameIndex: number) => void
+}
 
+export function FrameControls({ totalFrames, currentFrame, onFrameChange }: FrameControlsProps) {
   const handlePrevFrame = () => {
-    setCurrentFrame((prev) => Math.max(0, prev - 1))
+    onFrameChange(Math.max(0, currentFrame - 1))
   }
 
   const handleNextFrame = () => {
-    setCurrentFrame((prev) => Math.min(totalFrames - 1, prev + 1))
+    onFrameChange(Math.min(totalFrames - 1, currentFrame + 1))
   }
 
   return (
@@ -39,7 +41,7 @@ export function FrameControls() {
           value={[currentFrame]}
           max={totalFrames - 1}
           step={1}
-          onValueChange={(value) => setCurrentFrame(value[0])}
+          onValueChange={(value) => onFrameChange(value[0])}
           className="mt-6"
         />
       </CardContent>

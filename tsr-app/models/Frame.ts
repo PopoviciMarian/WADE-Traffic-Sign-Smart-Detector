@@ -20,6 +20,18 @@ export interface Frame {
     detections: Detection[]
 }
 
+export interface VideoInfo {
+    id: string
+    title: string
+    description: string
+    totalFrames: number
+    duration: number
+    user: {
+      name: string
+      avatar: string
+    }
+  }
+
 export const DetectionSchema = {
     classId: { type: Number, required: true },
     point: {

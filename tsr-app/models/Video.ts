@@ -12,6 +12,8 @@ export interface Video {
   sharedWith: string[]
   thumbnailUrl: string,
   fps: number
+  length: number
+  frames: number
 }
 
 export const VideoSchema = {

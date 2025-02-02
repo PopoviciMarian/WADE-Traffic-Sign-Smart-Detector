@@ -13,7 +13,7 @@ export async function POST(req: NextRequest)  {
      return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
    }
 
-  const { videoId, videoUrl, thumbnailUrl, fps } = await req.json();
+  const { videoId, videoUrl, thumbnailUrl, fps, length, frames} = await req.json();
  
   if (!videoId || !videoUrl) {
     return NextResponse.json({ message: "Missing required fields" }, { status: 400 })
@@ -32,7 +32,10 @@ export async function POST(req: NextRequest)  {
       isProcessed: false,
       sharedWith: [  ],
       fps: Number(fps),
-      thumbnailUrl: thumbnailUrl
+      thumbnailUrl: thumbnailUrl,
+      length: Number(length),
+      frames: frames
+
     }
 
     await db.collection("videos").insertOne(video)

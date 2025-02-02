@@ -2,9 +2,10 @@ from flask import Flask, request, jsonify
 from google.cloud import storage
 import os
 import uuid
+from flask_cors import CORS
 
 app = Flask(__name__)
-
+CORS(app)
 # Configuration
 UPLOAD_FOLDER = "uploads"
 BUCKET_NAME = os.environ.get("BUCKET_NAME")

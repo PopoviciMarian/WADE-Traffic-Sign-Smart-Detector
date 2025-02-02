@@ -12,10 +12,10 @@ RUN npm install --force --frozen-lockfile
 
 # Copy the rest of the app's source code
 COPY . .
-ENV MONGODB_URI=""
-ENV NEXTAUTH_SECRET=""
-ENV AUTH_GITHUB_ID=""
-ENV AUTH_GITHUB_SECRET=""
+ENV MONGODB_URI="mongodb://localhost:27017"
+ENV NEXTAUTH_SECRET="a"
+ENV AUTH_GITHUB_ID="a"
+ENV AUTH_GITHUB_SECRET="a"
 ENV NEXT_PUBLIC_VIDEO_INGESTION_SERVICE_URL=https://video-ingestion-service-1003028948668.us-central1.run.app/upload
 ENV NEXT_PUBLIC_FRAME_EXTRACTOR_SERVICE_URL=https://frame-extraction-service-1003028948668.us-central1.run.app/extract-frames
 ENV NEXT_PUBLIC_VIDEO_SIGN_DETECTION_SERVICE_URL=https://sign-detection-service-1003028948668.us-central1.run.app/detect-signs

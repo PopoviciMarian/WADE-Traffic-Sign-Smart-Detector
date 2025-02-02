@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useRef } from "react"
 import { useDropzone } from "react-dropzone"
-import { Upload, Play, Pause, X } from "lucide-react"
+import { Loader, Upload, Play, Pause, X } from "lucide-react"
 import { Progress } from "@/components/ui/progress"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -220,7 +220,10 @@ export function UploadArea({ onClose }: UploadAreaProps) {
           <Button onClick={handleUpload} disabled={isUploading}>
             {isUploading ? (
               <>
-                <span className="animate-spin mr-2">◌</span>
+                <span className="animate-spin mr-2">
+                  <Loader className="h-4 w-4" />
+                </span>
+
                 Uploading...
               </>
             ) : (

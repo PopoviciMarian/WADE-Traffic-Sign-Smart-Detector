@@ -1,17 +1,13 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
-
+import { Frame, Detection } from "@/models/Frame"
+import clientPromise from "@/lib/mongodb"
 
 const getFrames = async (videoId: string, fps: number) => {
   const URL = process.env.NEXT_PUBLIC_FRAME_EXTRACTOR_SERVICE_URL ?? ""
-/*
-{
-  "unique_filename": "6dbcaf5e27cd45f1b42631951684b5bb.mp4",
-  "frame_rate": 2
-}*/
-
-const response = await fetch(URL, {
+  
+  const response = await fetch(URL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -23,47 +19,58 @@ const response = await fetch(URL, {
     throw new Error("Failed to extract frames")
   }
 
+  return (await response.json())["frames"] as string[]
 
-/*{
-	"frames": [
-		"https://storage.googleapis.com/video-bucket-wade-1/b9af75d5aad74513841a18434ba9c9b4.jpg",
-		"https://storage.googleapis.com/video-bucket-wade-1/daecb3e07bc04245a1927c95e41af3ff.jpg",
-		"https://storage.googleapis.com/video-bucket-wade-1/ee6b818eb5364442948124b2bc232f50.jpg",
-(...)
-  ],
-  */
- 
-  return response.json()
+}
 
+const signDetection = async (frameUrl: string) => {
+  
+  const frameId = frameUrl.split("/").pop()
+  const URL = process.env.NEXT_PUBLIC_VIDEO_SIGN_DETECTION_SERVICE_URL ?? ""
+  console.log("Frame ID", frameId)
+  console.log("URL", URL)
+  const response = await fetch(URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ frame_id: frameId }),
+  })
+
+  if (!response.ok) {
+    throw new Error("Failed to detect signs")
+  }
+  return (await response.json())["detections"] as any[]
 }
 
 
 export async function processVideo(videoId: string, fps: number) {
   try {
-   
+   console.log("Processing video", videoId)
+    const frames = await getFrames(videoId, fps)
+    const detections = await Promise.all(frames.map((frame: string) => signDetection(frame)))
+    const frameData = frames.map((frame, index) => {
+      return {
+        url: frame,
+        detections: detections[index].map((detection: any) => {
+          return {
+            classId: detection.classId,
+            point: detection.point,
+          } as Detection
+        }),
+      } as Frame
+    })
 
-    // Here you would:
-    // 1. Upload the video to storage
-    // 2. Start a background job to process frames
-    // 3. Store frame metadata in your database
+    const client = await clientPromise
+    const db = client.db()
+    await db.collection("frames").insertMany(frameData)
+    await db.collection("videos").updateOne({ videoId }, { $set: { isProcessed: true } })
 
-    // Example structure for frame processing:
-    const frames = {
-      videoId: "generated-id",
-      totalFrames: 0,
-      frames: [
-        {
-          frameNumber: 1,
-          timestamp: 0,
-          description: "",
-          metadata: {},
-        },
-      ],
-    }
 
-    revalidatePath("/videos")
+    console.log("Video processed successfully")
     return { success: true, videoId: "generated-id" }
   } catch (error) {
+    console.error("Error processing video:", error)
     return { success: false, error: "Failed to process video" }
   }
 }

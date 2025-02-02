@@ -20,7 +20,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (status === "authenticated") {
-      fetch("/api/videos?mode=my")
+      fetch("/api/videos?mode=my" )
         .then((res) => res.json())
         .then((data) => {
           setVideos(data)

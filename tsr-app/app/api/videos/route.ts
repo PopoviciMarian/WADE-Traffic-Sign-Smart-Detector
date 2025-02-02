@@ -30,7 +30,7 @@ export async function POST(req: NextRequest)  {
       uploadedAt: new Date(),
       isPublic: false,
       isProcessed: false,
-      sharedWith: [ session.user?.email as string ],
+      sharedWith: [  ],
       fps: Number(fps),
       thumbnailUrl: thumbnailUrl
     }
@@ -44,130 +44,68 @@ export async function POST(req: NextRequest)  {
   }
 }
 
-export async function GET(req: NextRequest)  {
-  
-  const mode = req.nextUrl.searchParams.get('mode');
-  if (mode === "public") {
-    return getPublicVideos()
-  }
-  else if (mode === "shared") {
-    return getSharedVideos(req)
-  }
-  else if (mode === "my") {
-    return getMyVideos(req)
-  }
+export async function GET(req: NextRequest) {
+  const mode = req.nextUrl.searchParams.get("mode");
 
-
-  return NextResponse.json({ message: "Invalid mode" }, { status: 400 })
-}
-
-const getPublicVideos = async () => {
-  try {
-  const client = await clientPromise
-  const db = client.db()
-
-  const videos = await db.collection("videos").find({ isPublic: true }).toArray()
-
-
-  const responseVideos = videos.map((video) => {
-    return {
-      id: video._id,
-      title: video.title,
-      thumbnail: video.thumbnailUrl,
-      progress: 100,
-      user: {},
-      }
-    }
-  )
-
-  for (let i = 0; i < responseVideos.length; i++) {
-    const user = await db.collection("users").findOne({ email: videos[i].userId })
-    responseVideos[i].user = {
-      name: user?.name,
-      avatar: user?.image,
-    }
-  }
-    return NextResponse.json(responseVideos)
-  } catch (error) {
-    console.error("Error fetching public videos:", error)
-    return NextResponse.json({ message: "Failed to fetch public videos" }, { status: 500 })
-  }
-}
-
-const getSharedVideos = async (req: NextRequest) => {
-  const session = await getServerSession(authOptions);
-
-  if (!session) {
-    return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
+  if (!mode) {
+    return NextResponse.json({ message: "Invalid mode" }, { status: 400 });
   }
 
   try {
-    const client = await clientPromise
-    const db = client.db()
+    const session = await getServerSession(authOptions);
+    const client = await clientPromise;
+    const db = client.db();
 
-    // if sharedWith array contains the user's email address
-    const videos = await db.collection("videos").find({ sharedWith: session.user?.email }).toArray()
-    const responseVideos = videos.map((video) => {
-      return {
-        id: video._id,
-        title: video.title,
-        thumbnail: video.thumbnailUrl,
-        progress: 100,
-        user: {},
-        }
-      }
-    )
-  
-    for (let i = 0; i < responseVideos.length; i++) {
-      const user = await db.collection("users").findOne({ email: videos[i].userId })
-      responseVideos[i].user = {
-        name: user?.name,
-        avatar: user?.image,
-      }
+    let filter = {};
+
+    switch (mode) {
+      case "public":
+        filter = { isPublic: true };
+        break;
+      case "shared":
+        if (!session) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+        filter = { sharedWith: session.user?.email };
+        break;
+      case "my":
+        if (!session) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+        filter = { userId: session.user?.email };
+        break;
+      default:
+        return NextResponse.json({ message: "Invalid mode" }, { status: 400 });
     }
-      return NextResponse.json(responseVideos)
 
+    const videos = await fetchVideos(db, filter);
+    return NextResponse.json(videos);
   } catch (error) {
-    console.error("Error fetching shared videos:", error)
-    return NextResponse.json({ message: "Failed to fetch shared videos" }, { status: 500 })
+    console.error(`Error fetching ${mode} videos:`, error);
+    return NextResponse.json({ message: `Failed to fetch ${mode} videos` }, { status: 500 });
   }
 }
 
-const getMyVideos = async (req: NextRequest) => {
-  const session = await getServerSession(authOptions);
 
-  if (!session) {
-    return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
-  }
+const fetchVideos = async (db: any, filter: any) => {
+  const videos = await db.collection("videos").find(filter).sort({ uploadedAt: -1 }).toArray();
 
-  try {
-    const client = await clientPromise
-    const db = client.db()
+  const responseVideos = videos.map((video: any) => ({
+    id: video._id,
+    title: video.title,
+    thumbnail: video.thumbnailUrl,
+    progress: 100,
+    isPublic: video.isPublic ?? undefined,
+    videoId: video.videoId ?? undefined,
+    isProcessed: video.isProcessed ?? undefined,
+    user: {},
+  }));
 
-    const videos = await db.collection("videos").find({ userId: session.user?.email }).toArray()
-    const responseVideos = videos.map((video) => {
-      return {
-        id: video._id,
-        title: video.title,
-        thumbnail: video.thumbnailUrl,
-        progress: 100,
-        isPublic: video.isPublic,
-        videoId: video.videoId,
-        user: {},
-        }
-      }
-    )
-  
-    for (let i = 0; i < responseVideos.length; i++) {
-      const user = await db.collection("users").findOne({ email: videos[i].userId })
-      responseVideos[i].user = {
-        name: user?.name,
-        avatar: user?.image,
-      }
-    }
-    return NextResponse.json(responseVideos)
-  } catch (error) {
-    console.error("Error fetching my videos:", error)
-    return NextResponse.json({ message: "Failed to fetch my videos" }, { status: 500 })
-  }
-}
+  // Fetch user details in bulk instead of looping
+  const userIds = [...new Set(videos.map((video: any) => video.userId))];
+  const users = await db.collection("users").find({ email: { $in: userIds } }).toArray();
+  const userMap = Object.fromEntries(users.map((user: any) => [user.email, { name: user.name, avatar: user.image }]));
+
+  // Assign user data
+  responseVideos.forEach((video: any, index: number) => {
+    responseVideos[index].user = userMap[videos[index].userId] || {};
+  });
+
+  return responseVideos;
+};

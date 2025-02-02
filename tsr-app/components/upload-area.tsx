@@ -144,14 +144,14 @@ export function UploadArea({ onClose }: UploadAreaProps) {
       <div
         {...getRootProps()}
         className={cn(
-          "border-2 border-dashed rounded-lg p-6 text-center hover:bg-accent/50 transition-colors cursor-pointer",
-          isDragging && "border-primary bg-accent",
+          "border-2 border-dashed rounded-lg p-6 text-center transition-colors cursor-pointer bg-background/90 backdrop-blur-sm hover:bg-accent/90",
+          isDragging && "border-primary bg-accent/90 border-primary",
         )}
       >
         <input {...getInputProps()} />
         <div className="flex items-center justify-center gap-2">
-          <Upload className="h-5 w-5 text-muted-foreground" />
-          <p className="text-sm text-muted-foreground">Drag and drop your video here, or click to select a file</p>
+          <Upload className="h-5 w-5 text-primary" />
+          <p className="text-sm font-medium">Drag and drop your video here, or click to select a file</p>
         </div>
       </div>
     )

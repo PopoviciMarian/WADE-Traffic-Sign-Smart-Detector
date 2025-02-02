@@ -23,7 +23,7 @@ export function AppBar() {
   }
 
   return (
-    <div className="border-b border-border bg-surface-a10 dark:bg-surface-a10">
+    <div className="border-b border-border bg-background/95 backdrop-blur-sm">
       <div className="flex h-16 items-center px-4">
         <Logo />
         <div className="ml-auto flex items-center space-x-4">

@@ -9,6 +9,7 @@ import { Video } from "@/models/Video"
 import { Frame } from "@/models/Frame"
 import { useState, useEffect } from "react"
 import { FramePlayer } from "@/components/frame-player";
+import { SkeletonVideoPage } from "@/components/skeleton-video-page";
 
 interface VideoPageProps {
   params: {
@@ -59,7 +60,7 @@ export default function VideoPage({ params }: VideoPageProps) {
   }
   
   if (!video || !currentFrame) {
-    return <div>Loading...</div>
+    return <SkeletonVideoPage />
   }
 
   return (

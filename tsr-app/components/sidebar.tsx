@@ -6,13 +6,14 @@ import Link from "next/link"
 import { useTranslation } from "@/lib/use-translation"
 import { useState, useEffect } from "react"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { useSession } from "next-auth/react"
 
 export function Sidebar() {
   const pathname = usePathname()
   const { t } = useTranslation()
   const [isOpen, setIsOpen] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
-
+  const { data: session } = useSession()
   useEffect(() => {
     const checkIsMobile = () => {
       setIsMobile(window.innerWidth < 768)
@@ -23,18 +24,22 @@ export function Sidebar() {
   }, [])
 
   const routes = [
-    {
-      label: t("nav.myVideos"),
-      icon: FolderHeart,
-      href: "/",
-      variant: "ghost",
-    },
-    {
-      label: t("nav.shared"),
-      icon: Users,
-      href: "/shared",
-      variant: "ghost",
-    },
+    ...(session
+      ? [
+          {
+            label: t("nav.myVideos"),
+            icon: FolderHeart,
+            href: "/",
+            variant: "ghost",
+          },
+          {
+            label: t("nav.shared"),
+            icon: Users,
+            href: "/shared",
+            variant: "ghost",
+          },
+        ]
+      : []),
     {
       label: t("nav.public"),
       icon: Globe,
@@ -90,4 +95,3 @@ export function Sidebar() {
     </div>
   )
 }
-

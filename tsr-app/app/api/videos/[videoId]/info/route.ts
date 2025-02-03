@@ -1,14 +1,7 @@
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import clientPromise from "@/lib/mongodb";
-import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server"
 
 export async function GET(request: Request, { params }: { params: { videoId: string } }) {
-    const session = await getServerSession(authOptions);
-
-    if (!session) {
-        return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
-    }
 
     const videoId = params.videoId
 

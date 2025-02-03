@@ -1,7 +1,9 @@
 from flask import Flask, request, jsonify
 from SPARQLWrapper import SPARQLWrapper, JSON
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 # Define your SPARQL endpoint
 SPARQL_ENDPOINT = "http://34.170.217.42/bigdata/namespace/trafficSign/sparql"  # Replace with your actual SPARQL endpoint

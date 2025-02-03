@@ -20,7 +20,7 @@ export function SkeletonVideoGrid({ count = 6 }: SkeletonVideoGridProps) {
               <Skeleton className="h-4 w-1/4" />
             </div>
             <div className="mt-4 space-y-2">
-              {Array.from({ length: 5 }).map((_, i) => (
+              {Array.from({ length: 3 }).map((_, i) => (
                 <div key={i} className="flex items-center">
                   <Skeleton className="h-4 w-4 mr-2" />
                   <Skeleton className="h-4 w-full" />

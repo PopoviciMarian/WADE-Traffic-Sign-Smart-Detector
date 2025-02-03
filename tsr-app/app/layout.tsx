@@ -29,7 +29,7 @@ export default async function RootLayout({
                   </div>
                   <div className="flex pt-16">
                     <Sidebar />
-                    <main className="flex-1 p-6 ml-56">{children}</main>
+                    <main className="flex-1 p-4 md:p-6 md:ml-56">{children}</main>
                   </div>
                 </div>
               </div>

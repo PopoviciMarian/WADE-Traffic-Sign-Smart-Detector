@@ -213,11 +213,11 @@ export function UploadArea({ onClose }: UploadAreaProps) {
             )}
           </p>
         </div>
-        <div className="flex justify-end gap-4">
-          <Button variant="outline" onClick={resetUpload}>
+        <div className="flex flex-col sm:flex-row justify-end gap-4 mt-4">
+          <Button variant="outline" onClick={resetUpload} className="w-full sm:w-auto">
             Cancel
           </Button>
-          <Button onClick={handleUpload} disabled={isUploading}>
+          <Button onClick={handleUpload} disabled={isUploading}  className="w-full sm:w-auto">
             {isUploading ? (
               <>
                 <span className="animate-spin mr-2">

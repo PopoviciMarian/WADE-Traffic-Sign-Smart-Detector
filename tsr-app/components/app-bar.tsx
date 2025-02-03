@@ -26,7 +26,7 @@ export function AppBar() {
     <div className="border-b border-yellow-200 dark:border-yellow-800 bg-yellow-100 dark:bg-yellow-900">
       <div className="flex h-16 items-center px-4">
         <Logo />
-        <div className="ml-auto flex items-center space-x-4">
+        <div className="ml-auto flex items-center space-x-2 sm:space-x-4">
           <LanguageSelector />
           <ThemeToggle />
           {session ?   <UserNav user={session.user as UserNavProps}  /> : <LoginButton />}

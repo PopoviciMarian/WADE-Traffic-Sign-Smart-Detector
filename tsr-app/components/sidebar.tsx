@@ -1,33 +1,40 @@
 "use client"
 import { Button } from "@/components/ui/button"
-import { FolderHeart, Users, Globe } from "lucide-react"
+import { FolderHeart, Users, Globe, Menu } from "lucide-react"
 import { usePathname } from "next/navigation"
 import Link from "next/link"
 import { useTranslation } from "@/lib/use-translation"
-import { useSession } from "next-auth/react"
+import { useState, useEffect } from "react"
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 
 export function Sidebar() {
   const pathname = usePathname()
   const { t } = useTranslation()
-  const { data: session } = useSession()
+  const [isOpen, setIsOpen] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+    checkIsMobile()
+    window.addEventListener("resize", checkIsMobile)
+    return () => window.removeEventListener("resize", checkIsMobile)
+  }, [])
 
   const routes = [
-    ...(session
-      ? [
-          {
-            label: t("nav.myVideos"),
-            icon: FolderHeart,
-            href: "/",
-            variant: "ghost",
-          },
-          {
-            label: t("nav.shared"),
-            icon: Users,
-            href: "/shared",
-            variant: "ghost",
-          },
-        ]
-      : []),
+    {
+      label: t("nav.myVideos"),
+      icon: FolderHeart,
+      href: "/",
+      variant: "ghost",
+    },
+    {
+      label: t("nav.shared"),
+      icon: Users,
+      href: "/shared",
+      variant: "ghost",
+    },
     {
       label: t("nav.public"),
       icon: Globe,
@@ -36,8 +43,8 @@ export function Sidebar() {
     },
   ]
 
-  return (
-    <div className="flex flex-col h-screen w-56 bg-surface-a0 dark:bg-surface-a0 border-r border-border fixed left-0 top-0 z-40 pt-16 overflow-y-auto">
+  const SidebarContent = (
+    <div className="flex flex-col h-full bg-background/95 backdrop-blur-sm">
       <div className="flex-1 px-3 py-2">
         <div className="space-y-1">
           {routes.map((route) => (
@@ -46,6 +53,7 @@ export function Sidebar() {
               variant={pathname === route.href ? "secondary" : "ghost"}
               className="w-full justify-start text-accent hover:text-accent-foreground hover:bg-accent/10 dark:text-primary-a30 dark:hover:text-primary-a10 dark:hover:bg-surface-a20"
               asChild
+              onClick={() => setIsOpen(false)}
             >
               <Link href={route.href}>
                 <route.icon className="mr-2 h-4 w-4" />
@@ -58,6 +66,27 @@ export function Sidebar() {
       <div className="p-4 border-t border-border">
         <p className="text-sm text-muted-foreground">© 2025 Traffic Sign Recognition</p>
       </div>
+    </div>
+  )
+
+  if (isMobile) {
+    return (
+      <Sheet open={isOpen} onOpenChange={setIsOpen}>
+        <SheetTrigger asChild>
+          <Button variant="outline" size="icon" className="fixed bottom-4 right-4 z-50 rounded-full">
+            <Menu className="h-6 w-6" />
+          </Button>
+        </SheetTrigger>
+        <SheetContent side="left" className="p-0 w-56">
+          {SidebarContent}
+        </SheetContent>
+      </Sheet>
+    )
+  }
+
+  return (
+    <div className="hidden md:flex md:flex-col md:h-screen md:w-56 md:bg-background/95 md:backdrop-blur-sm md:border-r md:border-border md:fixed md:left-0 md:top-0 md:z-40 md:pt-16 md:overflow-y-auto">
+      {SidebarContent}
     </div>
   )
 }

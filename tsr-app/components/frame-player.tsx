@@ -30,8 +30,9 @@ export function FramePlayer({ frame }: FramePlayerProps) {
 
         // Draw detections
         frame.detections.forEach((detection) => {
-          ctx.strokeStyle = "red"
-          ctx.lineWidth = 5
+          // light blue
+          ctx.strokeStyle = "#00f"
+          ctx.lineWidth = 10
           ctx.strokeRect(
             detection.point.x1,
             detection.point.y1,

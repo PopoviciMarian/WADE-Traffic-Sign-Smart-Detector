@@ -9,6 +9,9 @@ export const translations = {
     "language.es": "Spanish",
     "language.fr": "French",
     "language.de": "German",
+    "videoGrid.emptyState.myVideos": "You haven't uploaded any videos yet. Start by uploading a video!",
+    "videoGrid.emptyState.shared": "No videos have been shared with you yet.",
+    "videoGrid.emptyState.public": "There are no public videos available at the moment.",
   },
   es: {
     "app.title": "Reconocimiento de Señales de Tráfico",
@@ -20,6 +23,9 @@ export const translations = {
     "language.es": "Español",
     "language.fr": "Francés",
     "language.de": "Alemán",
+    "videoGrid.emptyState.myVideos": "Aún no has subido ningún video. ¡Comienza subiendo un video!",
+    "videoGrid.emptyState.shared": "Aún no se han compartido videos contigo.",
+    "videoGrid.emptyState.public": "No hay videos públicos disponibles en este momento.",
   },
   fr: {
     "app.title": "Reconnaissance des Panneaux de Signalisation",
@@ -31,6 +37,10 @@ export const translations = {
     "language.es": "Espagnol",
     "language.fr": "Français",
     "language.de": "Allemand",
+    "videoGrid.emptyState.myVideos":
+      "Vous n'avez pas encore téléchargé de vidéos. Commencez par télécharger une vidéo !",
+    "videoGrid.emptyState.shared": "Aucune vidéo n'a encore été partagée avec vous.",
+    "videoGrid.emptyState.public": "Il n'y a pas de vidéos publiques disponibles pour le moment.",
   },
   de: {
     "app.title": "Verkehrszeichenerkennung",
@@ -42,6 +52,10 @@ export const translations = {
     "language.es": "Spanisch",
     "language.fr": "Französisch",
     "language.de": "Deutsch",
+    "videoGrid.emptyState.myVideos":
+      "Sie haben noch keine Videos hochgeladen. Beginnen Sie mit dem Hochladen eines Videos!",
+    "videoGrid.emptyState.shared": "Es wurden noch keine Videos mit Ihnen geteilt.",
+    "videoGrid.emptyState.public": "Derzeit sind keine öffentlichen Videos verfügbar.",
   },
 }
 

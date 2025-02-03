@@ -3,11 +3,12 @@
 import { useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Share2, Loader2, Clock, Film, Eye, Zap} from "lucide-react"
+import { Share2, Loader2, Clock, Film, Eye, Zap, Upload } from "lucide-react"
 import Image from "next/image"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import Link from "next/link"
 import { ShareDialog } from "@/components/share-dialog"
+import { useTranslation } from "@/lib/use-translation"
 
 interface Video {
   id: number
@@ -36,6 +37,7 @@ interface VideoGridProps {
 export function VideoGrid({ videos, isMyVideos = false }: VideoGridProps) {
   const [shareDialogOpen, setShareDialogOpen] = useState(false)
   const [selectedVideo, setSelectedVideo] = useState<Video | null>(null)
+  const { t } = useTranslation()
 
   const handleShareClick = (e: React.MouseEvent, video: Video) => {
     e.preventDefault()
@@ -48,6 +50,29 @@ export function VideoGrid({ videos, isMyVideos = false }: VideoGridProps) {
     // convert ms to s
     time = time / 1000
     return `${time.toFixed(2)}s`
+  }
+
+  if (videos.length === 0) {
+    let emptyStateMessage = ""
+    if (isMyVideos) {
+      emptyStateMessage = t("videoGrid.emptyState.myVideos")
+    } else if (window.location.pathname === "/shared") {
+      emptyStateMessage = t("videoGrid.emptyState.shared")
+    } else {
+      emptyStateMessage = t("videoGrid.emptyState.public")
+    }
+
+    return (
+      <div className="flex flex-col items-center justify-center h-64 text-center">
+        <Upload className="w-16 h-16 text-gray-400 mb-4" />
+        <p className="text-xl font-semibold mb-2">{emptyStateMessage}</p>
+        {isMyVideos && (
+          <Button asChild>
+            <Link href="/">{t("upload.title")}</Link>
+          </Button>
+        )}
+      </div>
+    )
   }
 
   return (

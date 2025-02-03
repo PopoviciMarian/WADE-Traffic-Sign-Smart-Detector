@@ -8,6 +8,16 @@ import type React from "react"
 import "@/app/globals.css"
 import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]/route"
+
+export const metadata = {
+  title: "Traffic Sign Recognition",
+  description: "A video analysis tool for traffic sign recognition",
+  icons: {
+    icon: "/icon.svg",
+  },
+  manifest: "/manifest.json",
+}
+
 export default async function RootLayout({
   children,
 }: {

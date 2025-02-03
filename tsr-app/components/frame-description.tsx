@@ -39,7 +39,7 @@ export function FrameDescription({ isLoading, ontologyData }: FrameDescriptionPr
               <div key={index} className="flex space-x-4">
                 <div className="flex-shrink-0 w-24 h-24 relative">
                   <Image
-                    src={data.signImageUrl || "/placeholder.svg"}
+                    src={`https://storage.cloud.google.com/video-bucket-wade-1/signs/Images/${data.id}.png?authuser=3`}
                     alt={data.name}
                     fill
                     className="object-contain"

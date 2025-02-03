@@ -41,6 +41,12 @@ export function FramePlayer({ frame }: FramePlayerProps) {
             detection.point.x2 - detection.point.x1,
             detection.point.y2 - detection.point.y1,
           )
+          // drow the index of the detection in the top left corner
+          ctx.fillStyle = "#00f"
+          //bold the text
+          ctx.font = "bold 40px Arial" 
+          ctx.fillText(detection.classId.toString(), detection.point.x1, detection.point.y1)
+
         })
       }
 

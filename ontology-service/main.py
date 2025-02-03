@@ -4,7 +4,7 @@ from SPARQLWrapper import SPARQLWrapper, JSON
 app = Flask(__name__)
 
 # Define your SPARQL endpoint
-SPARQL_ENDPOINT = "http://blazegraph-1003028948668.us-central1.run.app/bigdata/namespace/SignDetection/sparql"  # Replace with your actual SPARQL endpoint
+SPARQL_ENDPOINT = "http://34.170.217.42/bigdata/namespace/trafficSign/sparql"  # Replace with your actual SPARQL endpoint
 
 @app.route('/ontology', methods=['GET'])
 def get_traffic_sign():
@@ -21,13 +21,14 @@ def get_traffic_sign():
     PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
     PREFIX traffic: <http://example.org/traffic-signs#>
 
-    SELECT DISTINCT ?name ?description ?color ?shape ?id 
+    SELECT DISTINCT ?name ?description ?color ?shape ?id ?superclass
     WHERE {{
       ?sign traffic:name ?name .
       ?sign traffic:description ?description .
       ?sign traffic:color ?color .
       ?sign traffic:shape ?shape .
       ?sign traffic:id ?id .
+      OPTIONAL {{ ?sign rdfs:subClassOf ?superclass . }}
       FILTER(str(?id) = "{sign_id}")
       FILTER(LANG(?name) = "{lang}" && LANG(?description) = "{lang}" && LANG(?color) = "{lang}" && LANG(?shape) = "{lang}")
     }}
@@ -52,6 +53,7 @@ def get_traffic_sign():
             "color": result["color"]["value"],
             "shape": result["shape"]["value"],
             "id": result["id"]["value"],
+            "type": result["superclass"]["value"].split("#")[-1],
         }
 
         return jsonify(response)

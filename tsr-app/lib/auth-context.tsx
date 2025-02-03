@@ -1,43 +1,36 @@
 "use client"
 
 import { createContext, useContext, type ReactNode } from "react"
+import { useSession } from "next-auth/react"
 
 interface User {
   name: string
   email: string
-  imageUrl?: string
+  image?: string
 }
 
 interface AuthContextType {
   user: User | null
-  login: (user: User) => void
-  logout: () => void
+  loading: boolean
 }
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
-  login: () => {},
-  logout: () => {},
+  loading: true,
 })
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  // In a real app, you'd handle authentication state here
-  const user = {
-    name: "John Doe",
-    email: "john@example.com",
-    imageUrl: "/placeholder.svg?height=32&width=32",
-  }
+  const { data: session, status } = useSession()
 
-  const login = (user: User) => {
-    // Implement login logic
-  }
+  const user = session?.user
+    ? {
+        name: session.user.name || "",
+        email: session.user.email || "",
+        image: session.user.image || undefined,
+      }
+    : null
 
-  const logout = () => {
-    // Implement logout logic
-  }
-
-  return <AuthContext.Provider value={{ user, login, logout }}>{children}</AuthContext.Provider>
+  return <AuthContext.Provider value={{ user, loading: status === "loading" }}>{children}</AuthContext.Provider>
 }
 
 export const useAuth = () => useContext(AuthContext)
-

@@ -75,3 +75,4 @@ export const translations = {
     "login.termsNotice": "Durch die Anmeldung stimmen Sie unseren Nutzungsbedingungen und Datenschutzrichtlinien zu.",
   },
 }
+

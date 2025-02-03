@@ -1,35 +1,14 @@
+"use client";
+
 import { VideoPlayer } from "@/components/video-player"
 import { FrameControls } from "@/components/frame-controls"
 import { VideoTabs } from "@/components/video-tabs"
 import { FrameDescription } from "@/components/frame-description"
 import { notFound } from "next/navigation"
-
-// This would typically come from your database or API
-const videos = [
-  {
-    id: 1,
-    title: "Stop Sign Detection Algorithm",
-    description: "A detailed explanation of our stop sign detection algorithm using computer vision techniques.",
-    url: "/placeholder.mp4",
-    thumbnail: "/placeholder.svg",
-    user: {
-      name: "John Doe",
-      avatar: "/placeholder.svg?height=32&width=32",
-    },
-  },
-  {
-    id: 2,
-    title: "Speed Limit Sign Recognition",
-    description: "Demonstrating our latest speed limit sign recognition model with real-world examples.",
-    url: "/placeholder.mp4",
-    thumbnail: "/placeholder.svg",
-    user: {
-      name: "Jane Smith",
-      avatar: "/placeholder.svg?height=32&width=32",
-    },
-  },
-  // Add more video objects as needed
-]
+import { Video } from "@/models/Video"
+import { Frame } from "@/models/Frame"
+import { useState, useEffect } from "react"
+import { FramePlayer } from "@/components/frame-player";
 
 interface VideoPageProps {
   params: {
@@ -37,25 +16,75 @@ interface VideoPageProps {
   }
 }
 
-export default function VideoPage({ params }: VideoPageProps) {
-  const video = videos.find((v) => v.id === Number.parseInt(params.id))
+const  fetchVideoInfo = async (id: string): Promise<Video> => {
+  console.log("Fetching video info", id)
+  const response = await fetch(`/api/videos/${id}/info`)
+  if (!response.ok) {
+    throw new Error("Failed to fetch video")
+  }
+  return response.json()
+}
 
-  if (!video) {
-    notFound()
+const fetchFrame = async (videoId: string, frameIndex: number): Promise<Frame> => {
+  const response = await fetch(`/api/videos/${videoId}/frames/${frameIndex}`)
+  if (!response.ok) {
+    throw new Error("Failed to fetch frame")
+  }
+  return response.json()
+}
+
+
+export default function VideoPage({ params }: VideoPageProps) {
+  const { id } = params
+  const [video, setVideo] = useState<Video | null>(null)
+  const [currentFrame, setCurrentFrame] = useState<Frame | null>(null)
+  const [currentFrameIndex, setCurrentFrameIndex] = useState(0)
+  const [viewMode, setViewMode] = useState<"frames" | "video">("frames")
+  
+  useEffect(() => {
+    const loadVideoInfo = async () => {
+      const videoInfo = await fetchVideoInfo(id as string)
+      setVideo(videoInfo)
+      const initialFrame = await fetchFrame(id as string, 0)
+      setCurrentFrame(initialFrame)
+    }
+    loadVideoInfo()
+  }, [id])
+
+
+  const handleFrameChange = async (newIndex: number) => {
+    const frame = await fetchFrame(id as string, newIndex)
+    setCurrentFrame(frame)
+    setCurrentFrameIndex(newIndex)
+  }
+  
+  if (!video || !currentFrame) {
+    return <div>Loading...</div>
   }
 
   return (
     <div className="container mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-4">{video.title}</h1>
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         <div className="lg:col-span-3 space-y-6">
-          <VideoTabs />
-          <VideoPlayer videoId={params.id} videoUrl={video.url} />
-          <FrameDescription description={video.description} user={video.user} />
+        <VideoTabs activeTab={viewMode} onTabChange={setViewMode} />
+        {viewMode === "frames" ? (
+            <FramePlayer frame={currentFrame} />
+          ) : (
+            <VideoPlayer videoId={params.id} videoUrl={video.videoUrl} />
+          )}
+          {/* <FrameDescription description={video.description} user={video.user} /> */}
         </div>
+
         <div className="lg:col-span-1">
-          <FrameControls />
+          <FrameControls
+            totalFrames={video.frames}
+            currentFrame={currentFrameIndex}
+            onFrameChange={handleFrameChange}
+          />
         </div>
+        {/* <div className="lg:col-span-1">
+          <FrameControls />
+        </div> */}
       </div>
     </div>
   )

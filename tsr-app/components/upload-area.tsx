@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useRef } from "react"
 import { useDropzone } from "react-dropzone"
-import { Upload, Play, Pause, X } from "lucide-react"
+import { Loader, Upload, Play, Pause, X } from "lucide-react"
 import { Progress } from "@/components/ui/progress"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -92,7 +92,7 @@ export function UploadArea({ onClose }: UploadAreaProps) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ videoId: unique_filename, videoUrl: file_url, thumbnailUrl: thumbnail_url , fps: Number(fps) }),
+        body: JSON.stringify({ videoId: unique_filename, videoUrl: file_url, thumbnailUrl: thumbnail_url , fps: Number(fps), length: videoDuration, frames: Math.ceil(videoDuration * Number(fps) ) }),
       })
 
       if (!saveResponse.ok) {
@@ -144,14 +144,14 @@ export function UploadArea({ onClose }: UploadAreaProps) {
       <div
         {...getRootProps()}
         className={cn(
-          "border-2 border-dashed rounded-lg p-6 text-center hover:bg-accent/50 transition-colors cursor-pointer",
-          isDragging && "border-primary bg-accent",
+          "border-2 border-dashed rounded-lg p-6 text-center transition-colors cursor-pointer bg-background/90 backdrop-blur-sm hover:bg-accent/90",
+          isDragging && "border-primary bg-accent/90 border-primary",
         )}
       >
         <input {...getInputProps()} />
         <div className="flex items-center justify-center gap-2">
-          <Upload className="h-5 w-5 text-muted-foreground" />
-          <p className="text-sm text-muted-foreground">Drag and drop your video here, or click to select a file</p>
+          <Upload className="h-5 w-5 text-primary" />
+          <p className="text-sm font-medium">Drag and drop your video here, or click to select a file</p>
         </div>
       </div>
     )
@@ -213,14 +213,17 @@ export function UploadArea({ onClose }: UploadAreaProps) {
             )}
           </p>
         </div>
-        <div className="flex justify-end gap-4">
-          <Button variant="outline" onClick={resetUpload}>
+        <div className="flex flex-col sm:flex-row justify-end gap-4 mt-4">
+          <Button variant="outline" onClick={resetUpload} className="w-full sm:w-auto">
             Cancel
           </Button>
-          <Button onClick={handleUpload} disabled={isUploading}>
+          <Button onClick={handleUpload} disabled={isUploading}  className="w-full sm:w-auto">
             {isUploading ? (
               <>
-                <span className="animate-spin mr-2">◌</span>
+                <span className="animate-spin mr-2">
+                  <Loader className="h-4 w-4" />
+                </span>
+
                 Uploading...
               </>
             ) : (

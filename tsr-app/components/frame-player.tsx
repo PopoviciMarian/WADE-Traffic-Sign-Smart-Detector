@@ -1,16 +1,18 @@
 "use client"
 
-import { useRef, useEffect } from "react"
+import { useRef, useEffect , useState} from "react"
 import { Card } from "@/components/ui/card"
 import type { Frame } from "@/models/Frame"
+import { FrameDescription } from "@/components/frame-description"
+import type { OntologyData } from "@/models/Ontology"
 
 interface FramePlayerProps {
   frame: Frame
 }
 
 export function FramePlayer({ frame }: FramePlayerProps) {
-    console.log("FramePlayer", frame)
-    console.log("FramePlayer", frame.url)
+  const [ontologyData, setOntologyData] = useState<OntologyData[]>([])
+  const [isLoading, setIsLoading] = useState(false)
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
@@ -39,19 +41,41 @@ export function FramePlayer({ frame }: FramePlayerProps) {
             detection.point.x2 - detection.point.x1,
             detection.point.y2 - detection.point.y1,
           )
+                    // drow the index of the detection in the top left corner
+          ctx.fillStyle = "#00f"
+          //bold the text
+          ctx.font = "bold 40px Arial"
+          ctx.fillText(detection.classId.toString(), detection.point.x1, detection.point.y1)
+
         })
       }
+
+
+        const ontologyPromises = frame.detections.map((detection) =>
+          fetch(
+            `https://ontology-service-1003028948668.us-central1.run.app/ontology?id=${detection.classId}&lang=en`,
+          ).then((res) => res.json()),
+        )
+
+        const ontologyResults = await Promise.all(ontologyPromises)
+        setOntologyData(ontologyResults)
+        setIsLoading(false)
+
     }
+
+
 
     drawFrame()
   }, [frame])
 
   return (
+    <div className="space-y-4">
     <Card className="overflow-hidden">
       <div className="relative aspect-video bg-black">
         <canvas ref={canvasRef} className="w-full h-full" />
       </div>
     </Card>
+    <FrameDescription isLoading={isLoading} ontologyData={ontologyData} />
+  </div>
   )
 }
-

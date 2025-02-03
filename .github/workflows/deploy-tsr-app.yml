@@ -44,9 +44,9 @@ jobs:
           echo "NEXTAUTH_SECRET=$NEXTAUTH_SECRET" >> tsr-app/.env
           echo "AUTH_GITHUB_ID=$AUTH_GITHUB_ID" >> tsr-app/.env
           echo "AUTH_GITHUB_SECRET=$AUTH_GITHUB_SECRET" >> tsr-app/.env
-      - name cat evn file
+      - name: cat evn file
         run: cat tsr-app/.env
-        
+
       - name: Build and Push Docker Image
         run: |
           cd tsr-app

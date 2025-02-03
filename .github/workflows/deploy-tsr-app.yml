@@ -48,6 +48,10 @@ jobs:
           echo "NEXTAUTH_SECRET=$NEXTAUTH_SECRET" >> tsr-app/.env
           echo "AUTH_GITHUB_ID=$AUTH_GITHUB_ID" >> tsr-app/.env
           echo "AUTH_GITHUB_SECRET=$AUTH_GITHUB_SECRET" >> tsr-app/.env
+          echo "NEXTAUTH_URL=$NEXTAUTH_URL" >> tsr-app/.env
+          echo "NEXT_PUBLIC_VIDEO_INGESTION_SERVICE_URL=$NEXT_PUBLIC_VIDEO_INGESTION_SERVICE_URL" >> tsr-app/.env
+          echo "NEXT_PUBLIC_FRAME_EXTRACTOR_SERVICE_URL=$NEXT_PUBLIC_FRAME_EXTRACTOR_SERVICE_URL" >> tsr-app/.env
+          echo "NEXT_PUBLIC_VIDEO_SIGN_DETECTION_SERVICE_URL=$NEXT_PUBLIC_VIDEO_SIGN_DETECTION_SERVICE_URL" >> tsr-app/.env
       - name: cat evn file
         run: cat tsr-app/.env
 

@@ -12,10 +12,6 @@ RUN npm install --force --frozen-lockfile
 
 # Copy the rest of the app's source code
 COPY . .
-ENV NEXT_PUBLIC_VIDEO_INGESTION_SERVICE_URL=https://video-ingestion-service-1003028948668.us-central1.run.app/upload
-ENV NEXT_PUBLIC_FRAME_EXTRACTOR_SERVICE_URL=https://frame-extraction-service-1003028948668.us-central1.run.app/extract-frames
-ENV NEXT_PUBLIC_VIDEO_SIGN_DETECTION_SERVICE_URL=https://sign-detection-service-1003028948668.us-central1.run.app/detect-signs
-
 # Build the Next.js application
 RUN npm run build
 
@@ -25,9 +21,6 @@ FROM node:20-alpine AS runner
 # Set environment variables for production
 ENV NODE_ENV=production
 ENV PORT=3000
-ENV NEXT_PUBLIC_VIDEO_INGESTION_SERVICE_URL=https://video-ingestion-service-1003028948668.us-central1.run.app/upload
-ENV NEXT_PUBLIC_FRAME_EXTRACTOR_SERVICE_URL=https://frame-extraction-service-1003028948668.us-central1.run.app/extract-frames
-ENV NEXT_PUBLIC_VIDEO_SIGN_DETECTION_SERVICE_URL=https://sign-detection-service-1003028948668.us-central1.run.app/detect-signs
 
 # Set working directory
 WORKDIR /app
@@ -38,7 +31,7 @@ COPY --from=builder /app/package-lock.json ./
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/node_modules ./node_modules
-
+COPY --from=builder /app/.env ./
 # Expose the Next.js port
 EXPOSE 3000
 

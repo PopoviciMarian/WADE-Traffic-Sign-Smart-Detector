@@ -14,6 +14,10 @@ export interface Video {
   fps: number
   length: number
   frames: number
+  processingTime?: number
+  splitInFramesTime?: number
+  detectionsTime?: number
+  averageFrameDetectionTime?: number
 }
 
 export const VideoSchema = {

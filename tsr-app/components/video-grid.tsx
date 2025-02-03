@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Share2, Loader2 } from "lucide-react"
+import { Share2, Loader2, Clock, Film, Eye, Zap} from "lucide-react"
 import Image from "next/image"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import Link from "next/link"
@@ -17,6 +17,11 @@ interface Video {
   progress: number
   isPublic: boolean
   isProcessed: boolean
+  processingTime?: number
+  splitInFramesTime?: number
+  detectionsTime?: number
+  fps?: number
+  averageFrameDetectionTime?: number
   user: {
     name: string
     avatar: string
@@ -37,6 +42,12 @@ export function VideoGrid({ videos, isMyVideos = false }: VideoGridProps) {
     e.stopPropagation()
     setSelectedVideo(video)
     setShareDialogOpen(true)
+  }
+  const formatTime = (time: number | undefined) => {
+    if (time === undefined || time == null) return "N/A"
+    // convert ms to s
+    time = time / 1000
+    return `${time.toFixed(2)}s`
   }
 
   return (
@@ -66,6 +77,28 @@ export function VideoGrid({ videos, isMyVideos = false }: VideoGridProps) {
                         <AvatarFallback>{video.user.name[0]}</AvatarFallback>
                       </Avatar>
                       <span className="text-sm text-muted-foreground">{video.user.name}</span>
+                    </div>
+                    <div className="mt-4 space-y-2 text-sm">
+                      <div className="flex items-center">
+                        <Clock className="w-4 h-4 mr-2" />
+                        <span>Processing Time: {formatTime(video.processingTime)}</span>
+                      </div>
+                      <div className="flex items-center">
+                        <Film className="w-4 h-4 mr-2" />
+                        <span>Split Frames Time: {formatTime(video.splitInFramesTime)}</span>
+                      </div>
+                      <div className="flex items-center">
+                        <Eye className="w-4 h-4 mr-2" />
+                        <span>Detections Time: {formatTime(video.detectionsTime)}</span>
+                      </div>
+                      <div className="flex items-center">
+                        <Zap className="w-4 h-4 mr-2" />
+                        <span>FPS: {video.fps || "N/A"}</span>
+                      </div>
+                      <div className="flex items-center">
+                        <Clock className="w-4 h-4 mr-2" />
+                        <span>Avg Frame Detection: {formatTime(video.averageFrameDetectionTime)}</span>
+                      </div>
                     </div>
                     {isMyVideos && (
                       <Button
@@ -101,6 +134,28 @@ export function VideoGrid({ videos, isMyVideos = false }: VideoGridProps) {
                     </Avatar>
                     <span className="text-sm text-muted-foreground">{video.user.name}</span>
                   </div>
+                  <div className="mt-4 space-y-2 text-sm">
+                      <div className="flex items-center">
+                        <Clock className="w-4 h-4 mr-2" />
+                        <span>Processing Time: {formatTime(video.processingTime)}</span>
+                      </div>
+                      <div className="flex items-center">
+                        <Film className="w-4 h-4 mr-2" />
+                        <span>Split Frames Time: {formatTime(video.splitInFramesTime)}</span>
+                      </div>
+                      <div className="flex items-center">
+                        <Eye className="w-4 h-4 mr-2" />
+                        <span>Detections Time: {formatTime(video.detectionsTime)}</span>
+                      </div>
+                      <div className="flex items-center">
+                        <Zap className="w-4 h-4 mr-2" />
+                        <span>FPS: {video.fps || "N/A"}</span>
+                      </div>
+                      <div className="flex items-center">
+                        <Clock className="w-4 h-4 mr-2" />
+                        <span>Avg Frame Detection: {formatTime(video.averageFrameDetectionTime)}</span>
+                      </div>
+                    </div>
                   <div className="absolute inset-0 bg-background/50 backdrop-blur-sm flex flex-col items-center justify-center">
                     <p className="text-lg font-semibold text-foreground mb-2">Processing</p>
                     <Loader2 className="h-6 w-6 text-primary animate-spin" />

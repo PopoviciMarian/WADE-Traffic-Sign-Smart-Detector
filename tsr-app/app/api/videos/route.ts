@@ -98,6 +98,12 @@ const fetchVideos = async (db: any, filter: any) => {
     videoId: video.videoId ?? undefined,
     isProcessed: video.isProcessed ?? undefined,
     user: {},
+    processingTime: video.processingTime ?? undefined,
+    splitInFramesTime: video.splitInFramesTime,
+    detectionsTime: video.detectionsTime,
+    fps: video.fps,
+    length: video.length,
+    averageFrameDetectionTime:  video.detectionsTime / video.frames
   }));
 
   // Fetch user details in bulk instead of looping

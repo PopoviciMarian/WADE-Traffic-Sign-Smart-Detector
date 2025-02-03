@@ -2,7 +2,7 @@ name: Deploy Traffic Sign Recognition App to GCP
 
 env:
   FULL_IMAGE_NAME: us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/docker-repo-wade-1/tsr-app
-  MONOGDB_URI: ${{ secrets.MONGODB_URI }}
+  MONGODB_URI: ${{ secrets.MONGODB_URI }}
   NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
   AUTH_GITHUB_ID: ${{ secrets.AUTH_GITHUB_ID }}
   AUTH_GITHUB_SECRET: ${{ secrets.AUTH_GITHUB_SECRET }}

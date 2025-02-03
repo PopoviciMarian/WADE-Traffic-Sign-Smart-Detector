@@ -1,0 +1,704 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:owl="http://www.w3.org/2002/07/owl#"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xmlns:ns0="http://example.com/trafficSigns#"
+         xmlns:traffic="http://example.org/traffic-signs#">
+  <owl:Ontology rdf:about="http://example.com/trafficSigns#TrafficSignsOntology">
+    <rdfs:label xml:lang="en">Traffic Signs Ontology</rdfs:label>
+    <rdfs:comment xml:lang="en">An example ontology for traffic sign recognition with bilingual labels.</rdfs:comment>
+  </owl:Ontology>
+  <owl:Class rdf:about="http://example.com/trafficSigns#TrafficSign">
+    <rdfs:comment xml:lang="en">A class representing a traffic sign.</rdfs:comment>
+  </owl:Class>
+      <owl:Class rdf:about="http://example.org/traffic-signs#RegulatorySign">
+      <rdfs:label xml:lang="en">Regulatory Sign</rdfs:label>
+      <rdfs:label xml:lang="ro">Semn Reglementare</rdfs:label>
+      <rdfs:subClassOf rdf:resource="http://example.org/traffic-signs#TrafficSign"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://example.org/traffic-signs#WarningSign">
+          <rdfs:label xml:lang="en">Warning Sign</rdfs:label>
+      <rdfs:label xml:lang="ro">Semn Avertizare</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://example.org/traffic-signs#TrafficSign"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://example.org/traffic-signs#MandatorySign">
+          <rdfs:label xml:lang="en">Mandatory Sign</rdfs:label>
+      <rdfs:label xml:lang="ro">Semn Obligatoriu</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://example.org/traffic-signs#TrafficSign"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://example.org/traffic-signs#SpeedLimitSign">
+          <rdfs:label xml:lang="en">Speed Limit Sign</rdfs:label>
+      <rdfs:label xml:lang="ro">Semn Limita de Viteza</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://example.org/traffic-signs#RegulatorySign"/>
+    </owl:Class>
+<owl:DatatypeProperty rdf:about="http://example.org/traffic-signs#name">
+        <rdfs:domain rdf:resource="http://example.org/traffic-signs#TrafficSign"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://example.org/traffic-signs#description">
+        <rdfs:domain rdf:resource="http://example.org/traffic-signs#TrafficSign"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    <owl:DatatypeProperty rdf:about="http://example.org/traffic-signs#shape">
+        <rdfs:domain rdf:resource="http://example.org/traffic-signs#TrafficSign"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    <owl:DatatypeProperty rdf:about="http://example.org/traffic-signs#color">
+        <rdfs:domain rdf:resource="http://example.org/traffic-signs#TrafficSign"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+   <owl:DatatypeProperty rdf:about="http://example.org/traffic-signs#id">
+        <rdfs:domain rdf:resource="http://example.org/traffic-signs#TrafficSign"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+      <owl:Class rdf:about="http://example.org/traffic-signs#SpeedLimit20">
+        <rdfs:subClassOf rdf:resource="http://example.org/traffic-signs#SpeedLimitSign"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://example.org/traffic-signs#SpeedLimit30">
+        <rdfs:subClassOf rdf:resource="http://example.org/traffic-signs#SpeedLimitSign"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://example.org/traffic-signs#SpeedLimit50">
+        <rdfs:subClassOf rdf:resource="http://example.org/traffic-signs#SpeedLimitSign"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://example.org/traffic-signs#SpeedLimit60">
+        <rdfs:subClassOf rdf:resource="http://example.org/traffic-signs#SpeedLimitSign"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://example.org/traffic-signs#SpeedLimit70">
+        <rdfs:subClassOf rdf:resource="http://example.org/traffic-signs#SpeedLimitSign"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://example.org/traffic-signs#SpeedLimit80">
+        <rdfs:subClassOf rdf:resource="http://example.org/traffic-signs#SpeedLimitSign"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://example.org/traffic-signs#EndOfSpeedLimit80">
+        <rdfs:subClassOf rdf:resource="http://example.org/traffic-signs#RegulatorySign"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://example.org/traffic-signs#SpeedLimit100">
+        <rdfs:subClassOf rdf:resource="http://example.org/traffic-signs#SpeedLimitSign"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://example.org/traffic-signs#SpeedLimit120">
+        <rdfs:subClassOf rdf:resource="http://example.org/traffic-signs#SpeedLimitSign"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://example.org/traffic-signs#NoOvertaking">
+        <rdfs:subClassOf rdf:resource="http://example.org/traffic-signs#RegulatorySign"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://example.org/traffic-signs#NoOvertakingForHeavyVehicles">
+        <rdfs:subClassOf rdf:resource="http://example.org/traffic-signs#RegulatorySign"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://example.org/traffic-signs#RightOfWayAtNextIntersection">
+        <rdfs:subClassOf rdf:resource="http://example.org/traffic-signs#RegulatorySign"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://example.org/traffic-signs#PriorityRoad">
+        <rdfs:subClassOf rdf:resource="http://example.org/traffic-signs#RegulatorySign"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://example.org/traffic-signs#Yield">
+        <rdfs:subClassOf rdf:resource="http://example.org/traffic-signs#RegulatorySign"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://example.org/traffic-signs#Stop">
+        <rdfs:subClassOf rdf:resource="http://example.org/traffic-signs#RegulatorySign"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://example.org/traffic-signs#NoVehicles">
+        <rdfs:subClassOf rdf:resource="http://example.org/traffic-signs#RegulatorySign"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://example.org/traffic-signs#HeavyVehiclesProhibited">
+        <rdfs:subClassOf rdf:resource="http://example.org/traffic-signs#RegulatorySign"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://example.org/traffic-signs#NoEntry">
+        <rdfs:subClassOf rdf:resource="http://example.org/traffic-signs#RegulatorySign"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://example.org/traffic-signs#GeneralCaution">
+        <rdfs:subClassOf rdf:resource="http://example.org/traffic-signs#WarningSign"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://example.org/traffic-signs#DangerousLeftCurve">
+        <rdfs:subClassOf rdf:resource="http://example.org/traffic-signs#WarningSign"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://example.org/traffic-signs#DangerousRightCurve">
+        <rdfs:subClassOf rdf:resource="http://example.org/traffic-signs#WarningSign"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://example.org/traffic-signs#DoubleCurve">
+        <rdfs:subClassOf rdf:resource="http://example.org/traffic-signs#WarningSign"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://example.org/traffic-signs#BumpyRoad">
+        <rdfs:subClassOf rdf:resource="http://example.org/traffic-signs#WarningSign"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://example.org/traffic-signs#SlipperyRoad">
+        <rdfs:subClassOf rdf:resource="http://example.org/traffic-signs#WarningSign"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://example.org/traffic-signs#NarrowingRoad">
+        <rdfs:subClassOf rdf:resource="http://example.org/traffic-signs#WarningSign"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://example.org/traffic-signs#RoadWork">
+        <rdfs:subClassOf rdf:resource="http://example.org/traffic-signs#WarningSign"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://example.org/traffic-signs#TrafficSignals">
+        <rdfs:subClassOf rdf:resource="http://example.org/traffic-signs#WarningSign"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://example.org/traffic-signs#Pedestrian">
+        <rdfs:subClassOf rdf:resource="http://example.org/traffic-signs#WarningSign"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://example.org/traffic-signs#Children">
+        <rdfs:subClassOf rdf:resource="http://example.org/traffic-signs#WarningSign"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://example.org/traffic-signs#Bike">
+        <rdfs:subClassOf rdf:resource="http://example.org/traffic-signs#WarningSign"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://example.org/traffic-signs#Snow">
+        <rdfs:subClassOf rdf:resource="http://example.org/traffic-signs#WarningSign"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://example.org/traffic-signs#Deer">
+        <rdfs:subClassOf rdf:resource="http://example.org/traffic-signs#WarningSign"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://example.org/traffic-signs#EndOfLimits">
+        <rdfs:subClassOf rdf:resource="http://example.org/traffic-signs#RegulatorySign"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://example.org/traffic-signs#TurnRightAhead">
+        <rdfs:subClassOf rdf:resource="http://example.org/traffic-signs#MandatorySign"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://example.org/traffic-signs#TurnLeftAhead">
+        <rdfs:subClassOf rdf:resource="http://example.org/traffic-signs#MandatorySign"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://example.org/traffic-signs#AheadOnly">
+        <rdfs:subClassOf rdf:resource="http://example.org/traffic-signs#MandatorySign"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://example.org/traffic-signs#GoStraightOrRight">
+        <rdfs:subClassOf rdf:resource="http://example.org/traffic-signs#MandatorySign"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://example.org/traffic-signs#GoStraightOrLeft">
+        <rdfs:subClassOf rdf:resource="http://example.org/traffic-signs#MandatorySign"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://example.org/traffic-signs#KeepRight">
+        <rdfs:subClassOf rdf:resource="http://example.org/traffic-signs#MandatorySign"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://example.org/traffic-signs#KeepLeft">
+        <rdfs:subClassOf rdf:resource="http://example.org/traffic-signs#MandatorySign"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://example.org/traffic-signs#RoundaboutMandatory">
+        <rdfs:subClassOf rdf:resource="http://example.org/traffic-signs#MandatorySign"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://example.org/traffic-signs#EndOfNoOvertaking">
+        <rdfs:subClassOf rdf:resource="http://example.org/traffic-signs#RegulatorySign"/>
+    </owl:Class>
+    <owl:Class rdf:about="http://example.org/traffic-signs#EndOfNoOvertakingForHeavyVehicles">
+        <rdfs:subClassOf rdf:resource="http://example.org/traffic-signs#RegulatorySign"/>
+    </owl:Class>
+    <traffic:SpeedLimit20 rdf:about="http://example.org/traffic-signs#SpeedLimit20">
+        <traffic:name xml:lang="en" >Speed limit of 20 km/h</traffic:name>
+        <traffic:name xml:lang="ro" >Limita de viteza de 20 km/h</traffic:name>
+<traffic:description xml:lang="en">This sign indicates that the maximum allowable speed on this section of the road is 20 kilometers per hour. It is typically used in areas with high pedestrian traffic or other hazards requiring reduced speed.</traffic:description>
+<traffic:description xml:lang="ro">Acest semn indică faptul că viteza maximă permisă pe această secțiune de drum este de 20 kilometri pe oră. Este utilizat de obicei în zone cu trafic pietonal intens sau alte pericole care necesită o viteză redusă.</traffic:description>
+        <traffic:color xml:lang="en">white background, red border, black text</traffic:color>
+        <traffic:color xml:lang="ro">fundal alb, margine rosie, text negru</traffic:color>
+        <traffic:shape xml:lang="en">Circle</traffic:shape>
+        <traffic:shape xml:lang="ro">Cerc</traffic:shape>
+        <traffic:id xml:lang="en">0</traffic:id>
+        <traffic:id xml:lang="ro">0</traffic:id>
+    </traffic:SpeedLimit20>
+<traffic:SpeedLimit30 rdf:about="http://example.org/traffic-signs#SpeedLimit30">
+    <traffic:name xml:lang="en">Speed limit of 30 km/h</traffic:name>
+    <traffic:name xml:lang="ro">Limita de viteza de 30 km/h</traffic:name>
+<traffic:description xml:lang="en">This sign indicates that the maximum speed allowed on this section of the road is 30 kilometers per hour. It is commonly found in residential areas or near schools, where caution is needed.</traffic:description>
+<traffic:description xml:lang="ro">Acest semn indică faptul că viteza maximă permisă pe această secțiune de drum este de 30 kilometri pe oră. Este întâlnit frecvent în zone rezidențiale sau lângă școli, unde este necesară o atenție sporită.</traffic:description>
+    <traffic:color xml:lang="en">white background, red border, black text</traffic:color>
+    <traffic:color xml:lang="ro">fundal alb, margine rosie, text negru</traffic:color>
+    <traffic:shape xml:lang="en">Circle</traffic:shape>
+    <traffic:shape xml:lang="ro">Cerc</traffic:shape>
+    <traffic:id xml:lang="en">1</traffic:id>
+    <traffic:id xml:lang="ro">1</traffic:id>
+</traffic:SpeedLimit30>
+<traffic:SpeedLimit50 rdf:about="http://example.org/traffic-signs#SpeedLimit50">
+    <traffic:name xml:lang="en">Speed limit of 50 km/h</traffic:name>
+    <traffic:name xml:lang="ro">Limita de viteza de 50 km/h</traffic:name>
+<traffic:description xml:lang="en">This sign indicates that the maximum speed allowed on this section of the road is 50 kilometers per hour. It is a common speed limit for urban roads or residential streets.</traffic:description>
+<traffic:description xml:lang="ro">Acest semn indică faptul că viteza maximă permisă pe această secțiune de drum este de 50 kilometri pe oră. Este o limită de viteză obișnuită pe drumurile urbane sau pe străzile rezidențiale.</traffic:description>
+    <traffic:color xml:lang="en">white background, red border, black text</traffic:color>
+    <traffic:color xml:lang="ro">fundal alb, margine rosie, text negru</traffic:color>
+    <traffic:shape xml:lang="en">Circle</traffic:shape>
+    <traffic:shape xml:lang="ro">Cerc</traffic:shape>
+    <traffic:id xml:lang="en">2</traffic:id>
+    <traffic:id xml:lang="ro">2</traffic:id>
+</traffic:SpeedLimit50>
+<traffic:SpeedLimit60 rdf:about="http://example.org/traffic-signs#SpeedLimit60">
+    <traffic:name xml:lang="en">Speed limit of 60 km/h</traffic:name>
+    <traffic:name xml:lang="ro">Limita de viteza de 60 km/h</traffic:name>
+<traffic:description xml:lang="en">This sign indicates that the maximum speed allowed on this section of the road is 60 kilometers per hour. It is often used on suburban roads or roads with moderate traffic.</traffic:description>
+<traffic:description xml:lang="ro">Acest semn indică faptul că viteza maximă permisă pe această secțiune de drum este de 60 kilometri pe oră. Este frecvent utilizat pe drumurile suburbane sau pe drumurile cu trafic moderat.</traffic:description>
+    <traffic:color xml:lang="en">white background, red border, black text</traffic:color>
+    <traffic:color xml:lang="ro">fundal alb, margine rosie, text negru</traffic:color>
+    <traffic:shape xml:lang="en">Circle</traffic:shape>
+    <traffic:shape xml:lang="ro">Cerc</traffic:shape>
+    <traffic:id xml:lang="en">3</traffic:id>
+    <traffic:id xml:lang="ro">3</traffic:id>
+</traffic:SpeedLimit60>
+<traffic:SpeedLimit70 rdf:about="http://example.org/traffic-signs#SpeedLimit70">
+    <traffic:name xml:lang="en">Speed limit of 70 km/h</traffic:name>
+    <traffic:name xml:lang="ro">Limita de viteza de 70 km/h</traffic:name>
+<traffic:description xml:lang="en">This sign indicates that the maximum speed allowed on this section of the road is 70 kilometers per hour. It is typically found on main roads or highways in suburban areas.</traffic:description>
+<traffic:description xml:lang="ro">Acest semn indică faptul că viteza maximă permisă pe această secțiune de drum este de 70 kilometri pe oră. Este de obicei întâlnit pe drumurile principale sau pe autostrăzile din zonele suburbane.</traffic:description>
+    <traffic:color xml:lang="en">white background, red border, black text</traffic:color>
+    <traffic:color xml:lang="ro">fundal alb, margine rosie, text negru</traffic:color>
+    <traffic:shape xml:lang="en">Circle</traffic:shape>
+    <traffic:shape xml:lang="ro">Cerc</traffic:shape>
+    <traffic:id xml:lang="en">4</traffic:id>
+    <traffic:id xml:lang="ro">4</traffic:id>
+</traffic:SpeedLimit70>
+<traffic:SpeedLimit80 rdf:about="http://example.org/traffic-signs#SpeedLimit80">
+    <traffic:name xml:lang="en">Speed limit of 80 km/h</traffic:name>
+    <traffic:name xml:lang="ro">Limita de viteza de 80 km/h</traffic:name>
+<traffic:description xml:lang="en">This sign indicates that the maximum speed allowed on this section of the road is 80 kilometers per hour. It is commonly used on interurban roads or less populated areas.</traffic:description>
+<traffic:description xml:lang="ro">Acest semn indică faptul că viteza maximă permisă pe această secțiune de drum este de 80 kilometri pe oră. Este utilizat frecvent pe drumurile interurbane sau în zonele mai puțin populate.</traffic:description>
+    <traffic:color xml:lang="en">white background, red border, black text</traffic:color>
+    <traffic:color xml:lang="ro">fundal alb, margine rosie, text negru</traffic:color>
+    <traffic:shape xml:lang="en">Circle</traffic:shape>
+    <traffic:shape xml:lang="ro">Cerc</traffic:shape>
+    <traffic:id xml:lang="en">5</traffic:id>
+    <traffic:id xml:lang="ro">5</traffic:id>
+</traffic:SpeedLimit80>
+<traffic:SpeedLimit100 rdf:about="http://example.org/traffic-signs#SpeedLimit100">
+    <traffic:name xml:lang="en">Speed limit of 100 km/h</traffic:name>
+    <traffic:name xml:lang="ro">Limita de viteza de 100 km/h</traffic:name>
+<traffic:description xml:lang="en">This sign indicates that the maximum speed allowed on this section of the road is 100 kilometers per hour. It is typically used on highways and major intercity roads.</traffic:description>
+<traffic:description xml:lang="ro">Acest semn indică faptul că viteza maximă permisă pe această secțiune de drum este de 100 kilometri pe oră. Este utilizat de obicei pe autostrăzi și drumuri principale între orașe.</traffic:description>
+    <traffic:color xml:lang="en">white background, red border, black text</traffic:color>
+    <traffic:color xml:lang="ro">fundal alb, margine rosie, text negru</traffic:color>
+    <traffic:shape xml:lang="en">Circle</traffic:shape>
+    <traffic:shape xml:lang="ro">Cerc</traffic:shape>
+    <traffic:id xml:lang="en">7</traffic:id>
+    <traffic:id xml:lang="ro">7</traffic:id>
+</traffic:SpeedLimit100>
+<traffic:SpeedLimit120 rdf:about="http://example.org/traffic-signs#SpeedLimit120">
+    <traffic:name xml:lang="en">Speed limit of 120 km/h</traffic:name>
+    <traffic:name xml:lang="ro">Limita de viteza de 120 km/h</traffic:name>
+<traffic:description xml:lang="en">This sign indicates that the maximum speed allowed on this section of the road is 120 kilometers per hour. It is typically used on high-speed expressways and major highways.</traffic:description>
+<traffic:description xml:lang="ro">Acest semn indică faptul că viteza maximă permisă pe această secțiune de drum este de 120 kilometri pe oră. Este utilizat de obicei pe drumurile expres cu viteză mare și pe autostrăzi principale.</traffic:description>
+    <traffic:color xml:lang="en">white background, red border, black text</traffic:color>
+    <traffic:color xml:lang="ro">fundal alb, margine rosie, text negru</traffic:color>
+    <traffic:shape xml:lang="en">Circle</traffic:shape>
+    <traffic:shape xml:lang="ro">Cerc</traffic:shape>
+    <traffic:id xml:lang="en">8</traffic:id>
+    <traffic:id xml:lang="ro">8</traffic:id>
+</traffic:SpeedLimit120>
+<traffic:NoOvertaking rdf:about="http://example.org/traffic-signs#NoOvertaking">
+    <traffic:name xml:lang="en">No Overtaking</traffic:name>
+    <traffic:name xml:lang="ro">Depasirea interzisa</traffic:name>
+<traffic:description xml:lang="en">This sign prohibits overtaking on this section of the road, ensuring safety by preventing dangerous maneuvers in areas with limited visibility or other hazards.</traffic:description>
+<traffic:description xml:lang="ro">Acest semn interzice depășirea pe această secțiune de drum, asigurând siguranța prin prevenirea manevrelor periculoase în zone cu vizibilitate limitată sau alte pericole.</traffic:description>
+    <traffic:color xml:lang="en">white background, red border, black and red symbols</traffic:color>
+    <traffic:color xml:lang="ro">fundal alb, margine rosie, simboluri negre si rosii</traffic:color>
+    <traffic:shape xml:lang="en">Circle</traffic:shape>
+    <traffic:shape xml:lang="ro">Cerc</traffic:shape>
+    <traffic:id xml:lang="en">9</traffic:id>
+    <traffic:id xml:lang="ro">9</traffic:id>
+</traffic:NoOvertaking>
+<traffic:NoOvertakingForHeavyVehicles rdf:about="http://example.org/traffic-signs#NoOvertakingForHeavyVehicles">
+    <traffic:name xml:lang="en">No Overtaking for Heavy Vehicles</traffic:name>
+    <traffic:name xml:lang="ro">Depasirea interzisa pentru vehicule grele</traffic:name>
+    <traffic:description xml:lang="en">This sign prohibits overtaking for heavy vehicles on this section of the road. It is often used on roads with limited space or in areas where overtaking could be hazardous for large vehicles.</traffic:description>
+<traffic:description xml:lang="ro">Acest semn interzice depășirea vehiculelor grele pe această secțiune de drum. Este utilizat frecvent pe drumuri cu spațiu limitat sau în zone unde depășirea poate fi periculoasă pentru vehiculele mari.</traffic:description>
+    <traffic:color xml:lang="en">white background, red border, black and red symbols</traffic:color>
+    <traffic:color xml:lang="ro">fundal alb, margine rosie, simboluri negre si rosii</traffic:color>
+    <traffic:shape xml:lang="en">Circle</traffic:shape>
+    <traffic:shape xml:lang="ro">Cerc</traffic:shape>
+    <traffic:id xml:lang="en">10</traffic:id>
+    <traffic:id xml:lang="ro">10</traffic:id>
+</traffic:NoOvertakingForHeavyVehicles>
+<traffic:RightOfWayAtNextIntersection rdf:about="http://example.org/traffic-signs#RightOfWayAtNextIntersection">
+    <traffic:name xml:lang="en">Right-of-Way at next Intersection</traffic:name>
+    <traffic:name xml:lang="ro">Prioritate in intersectia urmatoare</traffic:name>
+<traffic:description xml:lang="en">This sign gives the right-of-way at the next intersection, indicating that vehicles approaching the intersection must yield to traffic from other directions.</traffic:description>
+<traffic:description xml:lang="ro">Acest semn acordă prioritate la următoarea intersecție, indicând că vehiculele care se apropie de intersecție trebuie să acorde prioritate traficului din alte direcții.</traffic:description>
+    <traffic:color xml:lang="en">yellow background, black symbols</traffic:color>
+    <traffic:color xml:lang="ro">fundal galben, simboluri negre</traffic:color>
+    <traffic:shape xml:lang="en">Diamond</traffic:shape>
+    <traffic:shape xml:lang="ro">Romb</traffic:shape>
+    <traffic:id xml:lang="en">11</traffic:id>
+    <traffic:id xml:lang="ro">11</traffic:id>
+</traffic:RightOfWayAtNextIntersection>
+<traffic:PriorityRoad rdf:about="http://example.org/traffic-signs#PriorityRoad">
+    <traffic:name xml:lang="en">Priority Road</traffic:name>
+    <traffic:name xml:lang="ro">Drum cu prioritate</traffic:name>
+<traffic:description xml:lang="en">This sign marks a priority road, meaning vehicles on this road have the right-of-way at intersections with other roads.</traffic:description>
+<traffic:description xml:lang="ro">Acest semn marchează un drum cu prioritate, ceea ce înseamnă că vehiculele pe acest drum au prioritate la intersecțiile cu alte drumuri.</traffic:description>
+    <traffic:color xml:lang="en">yellow background with black border</traffic:color>
+    <traffic:color xml:lang="ro">fundal galben cu margine neagra</traffic:color>
+    <traffic:shape xml:lang="en">Diamond</traffic:shape>
+    <traffic:shape xml:lang="ro">Romb</traffic:shape>
+    <traffic:id xml:lang="en">12</traffic:id>
+    <traffic:id xml:lang="ro">12</traffic:id>
+</traffic:PriorityRoad>
+<traffic:Yield rdf:about="http://example.org/traffic-signs#Yield">
+    <traffic:name xml:lang="en">Yield</traffic:name>
+    <traffic:name xml:lang="ro">Cedeaza trecerea</traffic:name>
+<traffic:description xml:lang="en">This sign instructs drivers to yield to oncoming traffic or vehicles approaching from another direction.</traffic:description>
+<traffic:description xml:lang="ro">Acest semn le cere șoferilor să acorde prioritate traficului care vine din direcția opusă sau vehiculelor care se apropie din altă direcție.</traffic:description>
+    <traffic:color xml:lang="en">white background, red border</traffic:color>
+    <traffic:color xml:lang="ro">fundal alb, margine rosie</traffic:color>
+    <traffic:shape xml:lang="en">Triangle (downward facing)</traffic:shape>
+    <traffic:shape xml:lang="ro">Triunghi (cu varful in jos)</traffic:shape>
+    <traffic:id xml:lang="en">13</traffic:id>
+    <traffic:id xml:lang="ro">13</traffic:id>
+</traffic:Yield>
+<traffic:Stop rdf:about="http://example.org/traffic-signs#Stop">
+    <traffic:name xml:lang="en">Stop</traffic:name>
+    <traffic:name xml:lang="ro">Oprire</traffic:name>
+<traffic:description xml:lang="en">This sign instructs drivers to come to a complete stop at the intersection and yield to other traffic before proceeding.</traffic:description>
+<traffic:description xml:lang="ro">Acest semn le cere șoferilor să oprească complet la intersecție și să acorde prioritate altor vehicule înainte de a continua.</traffic:description>
+    <traffic:color xml:lang="en">red background, white text</traffic:color>
+    <traffic:color xml:lang="ro">fundal rosu, text alb</traffic:color>
+    <traffic:shape xml:lang="en">Octagon</traffic:shape>
+    <traffic:shape xml:lang="ro">Octogon</traffic:shape>
+    <traffic:id xml:lang="en">14</traffic:id>
+    <traffic:id xml:lang="ro">14</traffic:id>
+</traffic:Stop>
+<traffic:NoVehicles rdf:about="http://example.org/traffic-signs#NoVehicles">
+    <traffic:name xml:lang="en">No Vehicles</traffic:name>
+    <traffic:name xml:lang="ro">Fara vehicule</traffic:name>
+    <traffic:description xml:lang="en">This sign prohibits all vehicles from entering a specific section of the road. It is used to block traffic for safety or security reasons.</traffic:description>
+<traffic:description xml:lang="ro">Acest semn interzice tuturor vehiculelor să intre într-o secțiune specifică de drum. Este utilizat pentru a bloca traficul din motive de siguranță sau securitate.</traffic:description>
+    <traffic:color xml:lang="en">white background, red border</traffic:color>
+    <traffic:color xml:lang="ro">fundal alb, margine rosie</traffic:color>
+    <traffic:shape xml:lang="en">Circle</traffic:shape>
+    <traffic:shape xml:lang="ro">Cerc</traffic:shape>
+    <traffic:id xml:lang="en">15</traffic:id>
+    <traffic:id xml:lang="ro">15</traffic:id>
+</traffic:NoVehicles>
+<traffic:HeavyVehiclesProhibited rdf:about="http://example.org/traffic-signs#HeavyVehiclesProhibited">
+    <traffic:name xml:lang="en">Heavy Vehicles Prohibited</traffic:name>
+    <traffic:name xml:lang="ro">Vehicule grele interzise</traffic:name>
+    <traffic:description xml:lang="en">This sign prohibits heavy vehicles (usually over a specific weight) from using this section of the road, often for safety reasons or to protect infrastructure.</traffic:description>
+<traffic:description xml:lang="ro">Acest semn interzice vehiculelor grele (de obicei peste o anumită greutate) să folosească această secțiune de drum, adesea din motive de siguranță sau pentru protejarea infrastructurii.</traffic:description>
+    <traffic:color xml:lang="en">white background, red border</traffic:color>
+    <traffic:color xml:lang="ro">fundal alb, margine rosie</traffic:color>
+    <traffic:shape xml:lang="en">Circle</traffic:shape>
+    <traffic:shape xml:lang="ro">Cerc</traffic:shape>
+    <traffic:id xml:lang="en">16</traffic:id>
+    <traffic:id xml:lang="ro">16</traffic:id>
+</traffic:HeavyVehiclesProhibited>
+<traffic:NoEntry rdf:about="http://example.org/traffic-signs#NoEntry">
+    <traffic:name xml:lang="en">No Entry</traffic:name>
+    <traffic:name xml:lang="ro">Acces interzis</traffic:name>
+    <traffic:description xml:lang="en">This sign indicates that vehicles are not allowed to enter this road or area. It is used to block access to restricted zones.</traffic:description>
+<traffic:description xml:lang="ro">Acest semn indică faptul că vehiculele nu au voie să intre pe acest drum sau într-o zonă restricționată. Este folosit pentru a bloca accesul în zonele restricționate.</traffic:description>
+    <traffic:color xml:lang="en">red background, white horizontal bar</traffic:color>
+    <traffic:color xml:lang="ro">fundal rosu, bara orizontala alba</traffic:color>
+    <traffic:shape xml:lang="en">Circle</traffic:shape>
+    <traffic:shape xml:lang="ro">Cerc</traffic:shape>
+    <traffic:id xml:lang="en">17</traffic:id>
+    <traffic:id xml:lang="ro">17</traffic:id>
+</traffic:NoEntry>
+<traffic:GeneralCaution rdf:about="http://example.org/traffic-signs#GeneralCaution">
+    <traffic:name xml:lang="en">General Caution</traffic:name>
+    <traffic:name xml:lang="ro">Atentie generala</traffic:name>
+    <traffic:description xml:lang="en">This sign is used to warn drivers of a potentially hazardous or cautionary situation ahead, such as road conditions or traffic issues.</traffic:description>
+<traffic:description xml:lang="ro">Acest semn este folosit pentru a avertiza șoferii despre o situație periculoasă sau care necesită atenție în față, cum ar fi condițiile de drum sau problemele de trafic.</traffic:description>
+    <traffic:color xml:lang="en">white background, red border, black exclamation mark</traffic:color>
+    <traffic:color xml:lang="ro">fundal alb, margine rosie, semn de exclamare negru</traffic:color>
+    <traffic:shape xml:lang="en">Triangle</traffic:shape>
+    <traffic:shape xml:lang="ro">Triunghi</traffic:shape>
+    <traffic:id xml:lang="en">18</traffic:id>
+    <traffic:id xml:lang="ro">18</traffic:id>
+</traffic:GeneralCaution>
+<traffic:DangerousLeftCurve rdf:about="http://example.org/traffic-signs#DangerousLeftCurve">
+    <traffic:name xml:lang="en">Dangerous Left Curve</traffic:name>
+    <traffic:name xml:lang="ro">Curba periculoasa la stanga</traffic:name>
+    <traffic:description xml:lang="en">This sign warns of a dangerous left curve ahead, requiring drivers to slow down and be cautious when turning left.</traffic:description>
+<traffic:description xml:lang="ro">Acest semn avertizează despre o curbă periculoasă la stânga, cerând șoferilor să reducă viteza și să fie atenți când fac virajul la stânga.</traffic:description>
+    <traffic:color xml:lang="en">white background, red border, black curve</traffic:color>
+    <traffic:color xml:lang="ro">fundal alb, margine rosie, curba neagra</traffic:color>
+    <traffic:shape xml:lang="en">Triangle</traffic:shape>
+    <traffic:shape xml:lang="ro">Triunghi</traffic:shape>
+    <traffic:id xml:lang="en">19</traffic:id>
+    <traffic:id xml:lang="ro">19</traffic:id>
+</traffic:DangerousLeftCurve>
+<traffic:DangerousRightCurve rdf:about="http://example.org/traffic-signs#DangerousRightCurve">
+    <traffic:name xml:lang="en">Dangerous Right Curve</traffic:name>
+    <traffic:name xml:lang="ro">Curba periculoasa la dreapta</traffic:name>
+<traffic:description xml:lang="en">This sign warns of a dangerous right curve ahead, requiring drivers to slow down and be cautious when turning right.</traffic:description>
+<traffic:description xml:lang="ro">Acest semn avertizează despre o curbă periculoasă la dreapta, cerând șoferilor să reducă viteza și să fie atenți când fac virajul la dreapta.</traffic:description>
+    <traffic:color xml:lang="en">white background, red border, black curve</traffic:color>
+    <traffic:color xml:lang="ro">fundal alb, margine rosie, curba neagra</traffic:color>
+    <traffic:shape xml:lang="en">Triangle</traffic:shape>
+    <traffic:shape xml:lang="ro">Triunghi</traffic:shape>
+    <traffic:id xml:lang="en">20</traffic:id>
+    <traffic:id xml:lang="ro">20</traffic:id>
+</traffic:DangerousRightCurve>
+<traffic:DoubleCurve rdf:about="http://example.org/traffic-signs#DoubleCurve">
+    <traffic:name xml:lang="en">Double Curve</traffic:name>
+    <traffic:name xml:lang="ro">Curba dubla</traffic:name>
+    <traffic:description xml:lang="en">This sign indicates two consecutive curves in opposite directions. Drivers should slow down and be cautious when navigating the curves.</traffic:description>
+<traffic:description xml:lang="ro">Acest semn indică două curbe consecutive în direcții opuse. Șoferii trebuie să reducă viteza și să fie atenți când navighează curbele.</traffic:description>
+    <traffic:color xml:lang="en">white background, red border, black curves</traffic:color>
+    <traffic:color xml:lang="ro">fundal alb, margine rosie, curbe negre</traffic:color>
+    <traffic:shape xml:lang="en">Triangle</traffic:shape>
+    <traffic:shape xml:lang="ro">Triunghi</traffic:shape>
+    <traffic:id xml:lang="en">21</traffic:id>
+    <traffic:id xml:lang="ro">21</traffic:id>
+</traffic:DoubleCurve>
+<traffic:BumpyRoad rdf:about="http://example.org/traffic-signs#BumpyRoad">
+    <traffic:name xml:lang="en">Bumpy Road</traffic:name>
+    <traffic:name xml:lang="ro">Drum cu denivelari</traffic:name>
+    <traffic:description xml:lang="en">This sign indicates that the road surface is uneven or bumpy ahead, requiring drivers to reduce speed for their safety.</traffic:description>
+<traffic:description xml:lang="ro">Acest semn indică faptul că suprafața drumului este denivelată sau cu denivelări înainte, cerând șoferilor să reducă viteza pentru siguranța lor.</traffic:description>
+    <traffic:color xml:lang="en">white background, red border, black bump</traffic:color>
+    <traffic:color xml:lang="ro">fundal alb, margine rosie, denivelare neagra</traffic:color>
+    <traffic:shape xml:lang="en">Triangle</traffic:shape>
+    <traffic:shape xml:lang="ro">Triunghi</traffic:shape>
+    <traffic:id xml:lang="en">22</traffic:id>
+    <traffic:id xml:lang="ro">22</traffic:id>
+</traffic:BumpyRoad>
+<traffic:SlipperyRoad rdf:about="http://example.org/traffic-signs#SlipperyRoad">
+    <traffic:name xml:lang="en">Slippery Road</traffic:name>
+    <traffic:name xml:lang="ro">Drum alunecos</traffic:name>
+    <traffic:description xml:lang="en">This sign warns of slippery conditions, typically due to ice or rain, requiring caution when driving.</traffic:description>
+<traffic:description xml:lang="ro">Acest semn avertizează despre condiții alunecoase, de obicei din cauza gheții sau a ploii, cerând prudență la volan.</traffic:description>
+    <traffic:color xml:lang="en">white background, red border, black symbols</traffic:color>
+    <traffic:color xml:lang="ro">fundal alb, margine rosie, simboluri negre</traffic:color>
+    <traffic:shape xml:lang="en">Triangle</traffic:shape>
+    <traffic:shape xml:lang="ro">Triunghi</traffic:shape>
+    <traffic:id xml:lang="en">23</traffic:id>
+    <traffic:id xml:lang="ro">23</traffic:id>
+</traffic:SlipperyRoad>
+<traffic:NarrowingRoad rdf:about="http://example.org/traffic-signs#NarrowingRoad">
+    <traffic:name xml:lang="en">Narrowing Road</traffic:name>
+    <traffic:name xml:lang="ro">Drum care se ingusteaza</traffic:name>
+    <traffic:description xml:lang="en">This sign indicates that the road narrows ahead, requiring drivers to slow down and possibly yield to oncoming traffic.</traffic:description>
+<traffic:description xml:lang="ro">Acest semn indică faptul că drumul se îngustează înainte, cerând șoferilor să reducă viteza și posibil să acorde prioritate traficului care vine din sens opus.</traffic:description>
+    <traffic:color xml:lang="en">white background, red border</traffic:color>
+    <traffic:color xml:lang="ro">fundal alb, margine rosie</traffic:color>
+    <traffic:shape xml:lang="en">Triangle</traffic:shape>
+    <traffic:shape xml:lang="ro">Triunghi</traffic:shape>
+    <traffic:id xml:lang="en">24</traffic:id>
+    <traffic:id xml:lang="ro">24</traffic:id>
+</traffic:NarrowingRoad>
+<traffic:RoadWork rdf:about="http://example.org/traffic-signs#RoadWork">
+    <traffic:name xml:lang="en">Road Work</traffic:name>
+    <traffic:name xml:lang="ro">Lucrari pe drum</traffic:name>
+    <traffic:description xml:lang="en">This sign indicates roadwork ahead, requiring drivers to slow down and be cautious of construction or maintenance activities.</traffic:description>
+<traffic:description xml:lang="ro">Acest semn indică lucrări de drum înainte, cerând șoferilor să reducă viteza și să fie atenți la activitățile de construcție sau întreținere.</traffic:description>
+    <traffic:color xml:lang="en">white background, red border, black worker symbol</traffic:color>
+    <traffic:color xml:lang="ro">fundal alb, margine rosie, simbol muncitor negru</traffic:color>
+    <traffic:shape xml:lang="en">Triangle</traffic:shape>
+    <traffic:shape xml:lang="ro">Triunghi</traffic:shape>
+    <traffic:id xml:lang="en">25</traffic:id>
+    <traffic:id xml:lang="ro">25</traffic:id>
+</traffic:RoadWork>
+<traffic:TrafficSignals rdf:about="http://example.org/traffic-signs#TrafficSignals">
+    <traffic:name xml:lang="en">Traffic Signals</traffic:name>
+    <traffic:name xml:lang="ro">Semafor</traffic:name>
+    <traffic:description xml:lang="en">This sign indicates the presence of traffic signals ahead, alerting drivers to prepare for traffic light changes.</traffic:description>
+<traffic:description xml:lang="ro">Acest semn indică prezența semafoarelor înainte, avertizând șoferii să se pregătească pentru schimbarea semaforului.</traffic:description>
+    <traffic:color xml:lang="en">white background, red border, black traffic light symbol</traffic:color>
+    <traffic:color xml:lang="ro">fundal alb, margine rosie, simbol de semafor negru</traffic:color>
+    <traffic:shape xml:lang="en">Triangle</traffic:shape>
+    <traffic:shape xml:lang="ro">Triunghi</traffic:shape>
+    <traffic:id xml:lang="en">26</traffic:id>
+    <traffic:id xml:lang="ro">26</traffic:id>
+</traffic:TrafficSignals>
+<traffic:Pedestrian rdf:about="http://example.org/traffic-signs#Pedestrian">
+    <traffic:name xml:lang="en">Pedestrian</traffic:name>
+    <traffic:name xml:lang="ro">Trecere pentru pietoni</traffic:name>
+    <traffic:description xml:lang="en">This sign indicates the presence of pedestrians in the area, requiring drivers to be cautious and yield to pedestrians crossing the road.</traffic:description>
+<traffic:description xml:lang="ro">Acest semn indică prezența pietonilor în zonă, cerând șoferilor să fie atenți și să acorde prioritate pietonilor care traversează drumul.</traffic:description>
+    <traffic:color xml:lang="en">white background, red border, black pedestrian symbol</traffic:color>
+    <traffic:color xml:lang="ro">fundal alb, margine rosie, simbol pieton negru</traffic:color>
+    <traffic:shape xml:lang="en">Triangle</traffic:shape>
+    <traffic:shape xml:lang="ro">Triunghi</traffic:shape>
+    <traffic:id xml:lang="en">27</traffic:id>
+    <traffic:id xml:lang="ro">27</traffic:id>
+</traffic:Pedestrian>
+<traffic:Children rdf:about="http://example.org/traffic-signs#Children">
+    <traffic:name xml:lang="en">Children</traffic:name>
+    <traffic:name xml:lang="ro">Copii</traffic:name>
+    
+<traffic:description xml:lang="en">This sign warns that children may be present in the area, such as near schools or playgrounds. Drivers should reduce speed and be prepared to stop if necessary.</traffic:description>
+<traffic:description xml:lang="ro">Acest semn avertizează că în zonă pot fi copii, cum ar fi lângă școli sau locuri de joacă. Șoferii trebuie să reducă viteza și să fie pregătiți să oprească dacă este necesar.</traffic:description>
+    <traffic:color xml:lang="en">white background, red border, black symbol</traffic:color>
+    <traffic:color xml:lang="ro">fundal alb, margine rosie, simbol negru</traffic:color>
+    <traffic:shape xml:lang="en">Triangle</traffic:shape>
+    <traffic:shape xml:lang="ro">Triunghi</traffic:shape>
+    <traffic:id xml:lang="en">28</traffic:id>
+    <traffic:id xml:lang="ro">28</traffic:id>
+</traffic:Children>
+<traffic:Bike rdf:about="http://example.org/traffic-signs#Bike">
+    <traffic:name xml:lang="en">Bike</traffic:name>
+    <traffic:name xml:lang="ro">Biciclete</traffic:name>
+    
+<traffic:description xml:lang="en">This sign indicates the presence of cyclists on or near the road. Drivers should be cautious and share the road safely with bicycles.</traffic:description>
+<traffic:description xml:lang="ro">Acest semn indică prezența bicicliștilor pe drum sau în apropiere. Șoferii trebuie să fie atenți și să împartă drumul în siguranță cu bicicletele.</traffic:description>
+    <traffic:color xml:lang="en">white background, red border, black bicycle symbol</traffic:color>
+    <traffic:color xml:lang="ro">fundal alb, margine rosie, simbol bicicleta negru</traffic:color>
+    <traffic:shape xml:lang="en">Triangle</traffic:shape>
+    <traffic:shape xml:lang="ro">Triunghi</traffic:shape>
+    <traffic:id xml:lang="en">29</traffic:id>
+    <traffic:id xml:lang="ro">29</traffic:id>
+</traffic:Bike>
+<traffic:Snow rdf:about="http://example.org/traffic-signs#Snow">
+    <traffic:name xml:lang="en">Snow</traffic:name>
+    <traffic:name xml:lang="ro">Zapada</traffic:name>
+    
+<traffic:description xml:lang="en">This sign warns that the road may be slippery due to snow or ice. Drivers should reduce speed and drive cautiously in winter conditions.</traffic:description>
+<traffic:description xml:lang="ro">Acest semn avertizează că drumul poate fi alunecos din cauza zăpezii sau gheții. Șoferii trebuie să reducă viteza și să conducă cu prudență în condiții de iarnă.</traffic:description>
+    <traffic:color xml:lang="en">white background, red border, black snowflake symbol</traffic:color>
+    <traffic:color xml:lang="ro">fundal alb, margine rosie, simbol fulg de zapada negru</traffic:color>
+    <traffic:shape xml:lang="en">Triangle</traffic:shape>
+    <traffic:shape xml:lang="ro">Triunghi</traffic:shape>
+    <traffic:id xml:lang="en">30</traffic:id>
+    <traffic:id xml:lang="ro">30</traffic:id>
+</traffic:Snow>
+<traffic:Deer rdf:about="http://example.org/traffic-signs#Deer">
+    <traffic:name xml:lang="en">Deer</traffic:name>
+    <traffic:name xml:lang="ro">Animale salbatice (caprioare)</traffic:name>
+    
+<traffic:description xml:lang="en">This sign warns that wild animals, such as deer, may be crossing the road. Drivers should reduce speed and be alert, especially in forested areas.</traffic:description>
+<traffic:description xml:lang="ro">Acest semn avertizează că animale sălbatice, cum ar fi cerbii, pot traversa drumul. Șoferii trebuie să reducă viteza și să fie vigilenți, mai ales în zone împădurite.</traffic:description>
+    <traffic:color xml:lang="en">white background, red border, black deer symbol</traffic:color>
+    <traffic:color xml:lang="ro">fundal alb, margine rosie, simbol caprioara negru</traffic:color>
+    <traffic:shape xml:lang="en">Triangle</traffic:shape>
+    <traffic:shape xml:lang="ro">Triunghi</traffic:shape>
+    <traffic:id xml:lang="en">31</traffic:id>
+    <traffic:id xml:lang="ro">31</traffic:id>
+</traffic:Deer>
+<traffic:EndOfLimits rdf:about="http://example.org/traffic-signs#EndOfLimits">
+    <traffic:name xml:lang="en">End of Limits</traffic:name>
+    <traffic:name xml:lang="ro">Sfarsit de restrictii</traffic:name>
+    <traffic:description xml:lang="en">This sign indicates the end of all previously imposed speed or restriction limits, allowing vehicles to follow general road regulations.</traffic:description>
+<traffic:description xml:lang="ro">Acest semn indică sfârșitul tuturor limitărilor de viteză sau restricții impuse anterior, permițând vehiculelor să urmeze regulile generale ale drumului.</traffic:description>
+    <traffic:color xml:lang="en">white background, black diagonal lines</traffic:color>
+    <traffic:color xml:lang="ro">fundal alb, linii diagonale negre</traffic:color>
+    <traffic:shape xml:lang="en">Circle</traffic:shape>
+    <traffic:shape xml:lang="ro">Cerc</traffic:shape>
+    <traffic:id xml:lang="en">32</traffic:id>
+    <traffic:id xml:lang="ro">32</traffic:id>
+</traffic:EndOfLimits>
+<traffic:TurnRightAhead rdf:about="http://example.org/traffic-signs#TurnRightAhead">
+    <traffic:name xml:lang="en">Turn Right Ahead</traffic:name>
+    <traffic:name xml:lang="ro">Viraj la dreapta inainte</traffic:name>
+    <traffic:description xml:lang="en">This sign instructs drivers to turn right ahead. It is used to guide traffic flow and prevent wrong turns.</traffic:description>
+<traffic:description xml:lang="ro">Acest semn le indică șoferilor să vireze la dreapta înainte. Este utilizat pentru a ghida fluxul de trafic și pentru a preveni virajele greșite.</traffic:description>
+    <traffic:color xml:lang="en">blue background, white arrow</traffic:color>
+    <traffic:color xml:lang="ro">fundal albastru, sageata alba</traffic:color>
+    <traffic:shape xml:lang="en">Circle</traffic:shape>
+    <traffic:shape xml:lang="ro">Cerc</traffic:shape>
+    <traffic:id xml:lang="en">33</traffic:id>
+    <traffic:id xml:lang="ro">33</traffic:id>
+</traffic:TurnRightAhead>
+<traffic:TurnLeftAhead rdf:about="http://example.org/traffic-signs#TurnLeftAhead">
+    <traffic:name xml:lang="en">Turn Left Ahead</traffic:name>
+    <traffic:name xml:lang="ro">Viraj la stanga inainte</traffic:name>
+    <traffic:description xml:lang="en">This sign instructs drivers to turn left ahead. It ensures traffic moves efficiently and safely in designated areas.</traffic:description>
+<traffic:description xml:lang="ro">Acest semn le indică șoferilor să vireze la stânga înainte. Asigură o circulație eficientă și sigură în zonele desemnate.</traffic:description>
+    <traffic:color xml:lang="en">blue background, white arrow</traffic:color>
+    <traffic:color xml:lang="ro">fundal albastru, sageata alba</traffic:color>
+    <traffic:shape xml:lang="en">Circle</traffic:shape>
+    <traffic:shape xml:lang="ro">Cerc</traffic:shape>
+    <traffic:id xml:lang="en">34</traffic:id>
+    <traffic:id xml:lang="ro">34</traffic:id>
+</traffic:TurnLeftAhead>
+<traffic:AheadOnly rdf:about="http://example.org/traffic-signs#AheadOnly">
+    <traffic:name xml:lang="en">Ahead Only</traffic:name>
+    <traffic:name xml:lang="ro">Mergi înainte</traffic:name>
+    <traffic:description xml:lang="en">This sign instructs drivers to continue straight ahead only. Turning left or right is not permitted at this point.</traffic:description>
+<traffic:description xml:lang="ro">Acest semn le indică șoferilor să continue doar înainte. Virajele la stânga sau la dreapta nu sunt permise în acest punct.</traffic:description>
+    <traffic:color xml:lang="en">blue background, white arrow</traffic:color>
+    <traffic:color xml:lang="ro">fundal albastru, săgeată albă</traffic:color>
+    <traffic:shape xml:lang="en">Circle</traffic:shape>
+    <traffic:shape xml:lang="ro">Cerc</traffic:shape>
+    <traffic:id xml:lang="en">35</traffic:id>
+    <traffic:id xml:lang="ro">35</traffic:id>
+</traffic:AheadOnly>
+<traffic:GoStraightOrRight rdf:about="http://example.org/traffic-signs#GoStraightOrRight">
+    <traffic:name xml:lang="en">Go Straight or Turn Right</traffic:name>
+    <traffic:name xml:lang="ro">Mergi înainte sau virează la dreapta</traffic:name>
+    <traffic:description xml:lang="en">This sign allows drivers to either go straight or turn right. It provides guidance on the permitted directions at an intersection.</traffic:description>
+<traffic:description xml:lang="ro">Acest semn le permite șoferilor să meargă fie înainte, fie să vireze la dreapta. Oferă indicații despre direcțiile permise la o intersecție.</traffic:description>
+    <traffic:color xml:lang="en">blue background, white arrow</traffic:color>
+    <traffic:color xml:lang="ro">fundal albastru, săgeată albă</traffic:color>
+    <traffic:shape xml:lang="en">Circle</traffic:shape>
+    <traffic:shape xml:lang="ro">Cerc</traffic:shape>
+    <traffic:id xml:lang="en">36</traffic:id>
+    <traffic:id xml:lang="ro">36</traffic:id>
+</traffic:GoStraightOrRight>
+<traffic:GoStraightOrLeft rdf:about="http://example.org/traffic-signs#GoStraightOrLeft">
+    <traffic:name xml:lang="en">Go Straight or Turn Left</traffic:name>
+    <traffic:name xml:lang="ro">Mergi înainte sau virează la stânga</traffic:name>
+    <traffic:description xml:lang="en">This sign allows drivers to either go straight or turn left. It is used at intersections to regulate traffic movement.</traffic:description>
+<traffic:description xml:lang="ro">Acest semn le permite șoferilor să meargă fie înainte, fie să vireze la stânga. Este utilizat la intersecții pentru a reglementa circulația.</traffic:description>
+    <traffic:color xml:lang="en">blue background, white arrow</traffic:color>
+    <traffic:color xml:lang="ro">fundal albastru, săgeată albă</traffic:color>
+    <traffic:shape xml:lang="en">Circle</traffic:shape>
+    <traffic:shape xml:lang="ro">Cerc</traffic:shape>
+    <traffic:id xml:lang="en">37</traffic:id>
+    <traffic:id xml:lang="ro">37</traffic:id>
+</traffic:GoStraightOrLeft>
+<traffic:KeepRight rdf:about="http://example.org/traffic-signs#KeepRight">
+    <traffic:name xml:lang="en">Keep Right</traffic:name>
+    <traffic:name xml:lang="ro">Ține dreapta</traffic:name>
+    <traffic:description xml:lang="en">This sign instructs drivers to keep right. It is used to manage traffic flow and prevent collisions, especially on divided roads.</traffic:description>
+<traffic:description xml:lang="ro">Acest semn le indică șoferilor să păstreze banda din dreapta. Este utilizat pentru a gestiona fluxul de trafic și pentru a preveni coliziunile, mai ales pe drumurile cu separare.</traffic:description>
+    <traffic:color xml:lang="en">blue background, white arrow</traffic:color>
+    <traffic:color xml:lang="ro">fundal albastru, săgeată albă</traffic:color>
+    <traffic:shape xml:lang="en">Circle</traffic:shape>
+    <traffic:shape xml:lang="ro">Cerc</traffic:shape>
+    <traffic:id xml:lang="en">38</traffic:id>
+    <traffic:id xml:lang="ro">38</traffic:id>
+</traffic:KeepRight>
+<traffic:KeepLeft rdf:about="http://example.org/traffic-signs#KeepLeft">
+    <traffic:name xml:lang="en">Keep Left</traffic:name>
+    <traffic:name xml:lang="ro">Ține stanga</traffic:name>
+<traffic:description xml:lang="en">This sign instructs drivers to keep left. It is used to ensure safe and organized traffic flow in specific road sections.</traffic:description>
+<traffic:description xml:lang="ro">Acest semn le indică șoferilor să păstreze banda din stânga. Este utilizat pentru a asigura un flux de trafic sigur și organizat în anumite secțiuni de drum.</traffic:description>
+    <traffic:color xml:lang="en">blue background, white arrow</traffic:color>
+    <traffic:color xml:lang="ro">fundal albastru, săgeată albă</traffic:color>
+    <traffic:shape xml:lang="en">Circle</traffic:shape>
+    <traffic:shape xml:lang="ro">Cerc</traffic:shape>
+    <traffic:id xml:lang="en">39</traffic:id>
+    <traffic:id xml:lang="ro">39</traffic:id>
+</traffic:KeepLeft>
+<traffic:RoundaboutMandatory rdf:about="http://example.org/traffic-signs#RoundaboutMandatory">
+    <traffic:name xml:lang="en">Roundabout Mandatory</traffic:name>
+    <traffic:name xml:lang="ro">Obligatoriu sens giratoriu</traffic:name>
+<traffic:description xml:lang="en">This sign mandates entry into a roundabout. Drivers must follow the circular traffic flow and yield to vehicles already inside the roundabout.</traffic:description>
+<traffic:description xml:lang="ro">Acest semn impune intrarea într-un sens giratoriu. Șoferii trebuie să urmeze fluxul circular al traficului și să acorde prioritate vehiculelor aflate deja în sensul giratoriu.</traffic:description>
+    <traffic:color xml:lang="en">blue background, white arrows</traffic:color>
+    <traffic:color xml:lang="ro">fundal albastru, săgeți albe</traffic:color>
+    <traffic:shape xml:lang="en">Circle</traffic:shape>
+    <traffic:shape xml:lang="ro">Cerc</traffic:shape>
+    <traffic:id xml:lang="en">39</traffic:id>
+    <traffic:id xml:lang="ro">39</traffic:id>
+</traffic:RoundaboutMandatory>
+<traffic:EndOfNoOvertaking rdf:about="http://example.org/traffic-signs#EndOfNoOvertaking">
+    <traffic:name xml:lang="en">End of No Overtaking</traffic:name>
+    <traffic:name xml:lang="ro">Sfârșit depășire interzisă</traffic:name>
+    <traffic:description xml:lang="en">This sign marks the end of the no overtaking restriction, allowing vehicles to pass slower traffic where safe.</traffic:description>
+<traffic:description xml:lang="ro">Acest semn marchează sfârșitul interdicției de depășire, permițând vehiculelor să depășească traficul mai lent acolo unde este sigur.</traffic:description>
+    <traffic:color xml:lang="en">white background, black diagonal lines over symbols</traffic:color>
+    <traffic:color xml:lang="ro">fundal alb, linii diagonale negre peste simboluri</traffic:color>
+    <traffic:shape xml:lang="en">Circle</traffic:shape>
+    <traffic:shape xml:lang="ro">Cerc</traffic:shape>
+    <traffic:id xml:lang="en">40</traffic:id>
+    <traffic:id xml:lang="ro">40</traffic:id>
+</traffic:EndOfNoOvertaking>
+<traffic:EndOfSpeedLimit80 rdf:about="http://example.org/traffic-signs#EndOfSpeedLimit80">
+    <traffic:name xml:lang="en">End of Speed Limit 80</traffic:name>
+    <traffic:name xml:lang="ro">Sfârșit limită de viteză 80</traffic:name>
+    
+<traffic:description xml:lang="en">This sign marks the end of the speed limit of 80 km/h, allowing vehicles to increase their speed as they continue. Drivers should check for the next speed limit sign.</traffic:description>
+<traffic:description xml:lang="ro">Acest semn marchează sfârșitul limitei de viteză de 80 km/h, permițând vehiculelor să își crească viteza pe măsură ce continuă. Șoferii trebuie să verifice următorul semn cu limita de viteză.</traffic:description>
+    <traffic:color xml:lang="en">white background, black diagonal lines</traffic:color>
+    <traffic:color xml:lang="ro">fundal alb, linii diagonale negre</traffic:color>
+    <traffic:shape xml:lang="en">Circle</traffic:shape>
+    <traffic:shape xml:lang="ro">Cerc</traffic:shape>
+    <traffic:id xml:lang="en">41</traffic:id>
+    <traffic:id xml:lang="ro">41</traffic:id>
+</traffic:EndOfSpeedLimit80>
+<traffic:EndOfNoOvertakingForHeavyVehicles rdf:about="http://example.org/traffic-signs#EndOfNoOvertakingForHeavyVehicles">
+    <traffic:name xml:lang="en">End of No Overtaking for Heavy Vehicles</traffic:name>
+    <traffic:name xml:lang="ro">Sfârșit depășire interzisă pentru vehicule grele</traffic:name>
+    <traffic:description xml:lang="en">This sign marks the end of the no overtaking restriction for heavy vehicles, allowing trucks and other large vehicles to overtake when conditions permit.</traffic:description>
+<traffic:description xml:lang="ro">Acest semn marchează sfârșitul interdicției de depășire pentru vehiculele grele, permițând camioanelor și altor vehicule mari să depășească atunci când condițiile permit.</traffic:description>
+    <traffic:color xml:lang="en">white background, black diagonal lines over symbols</traffic:color>
+    <traffic:color xml:lang="ro">fundal alb, linii diagonale negre peste simboluri</traffic:color>
+    <traffic:shape xml:lang="en">Circle</traffic:shape>
+    <traffic:shape xml:lang="ro">Cerc</traffic:shape>
+    <traffic:id xml:lang="en">42</traffic:id>
+    <traffic:id xml:lang="ro">42</traffic:id>
+</traffic:EndOfNoOvertakingForHeavyVehicles>
+</rdf:RDF>

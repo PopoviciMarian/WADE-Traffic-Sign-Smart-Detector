@@ -3,6 +3,8 @@ from google.cloud import storage
 import os
 import cv2
 import uuid
+from concurrent.futures import ThreadPoolExecutor
+import tempfile
 
 app = Flask(__name__)
 
@@ -17,58 +19,92 @@ os.makedirs(FRAME_FOLDER, exist_ok=True)
 storage_client = storage.Client()
 
 def download_video_from_gcs(unique_filename):
-    """Download video from Google Cloud Storage."""
+    """Download video from Google Cloud Storage and save to a temp file."""
     try:
         bucket = storage_client.bucket(BUCKET_NAME)
         blob = bucket.blob(unique_filename)
-        local_video_path = os.path.join(FRAME_FOLDER, unique_filename)
-        blob.download_to_filename(local_video_path)
-        return local_video_path
+        
+        temp_file = tempfile.NamedTemporaryFile(delete=False, suffix=".mp4")
+        blob.download_to_filename(temp_file.name)
+        
+        return temp_file.name
     except Exception as e:
         return None
 
+from concurrent.futures import ThreadPoolExecutor
+
+def save_frame(frame, frame_path):
+    """Save a single frame to disk."""
+    cv2.imwrite(frame_path, frame)
+
 def extract_frames(video_path, frame_rate):
-    """Extract frames from video at the specified frame rate."""
+    """Extract frames from video while maintaining order."""
     frames_list = []
-    
+    frame_data = []
+
     cap = cv2.VideoCapture(video_path)
     fps = int(cap.get(cv2.CAP_PROP_FPS))
 
     if not cap.isOpened():
         return None
 
-    frame_interval = max(1, fps // frame_rate)  # Ensure at least 1 frame is captured per second
-
+    frame_interval = max(1, fps // frame_rate)
     frame_count = 0
-    while True:
-        success, frame = cap.read()
-        if not success:
-            break
-        if frame_count % frame_interval == 0:
-            frame_filename = f"{uuid.uuid4().hex}.jpg"
-            frame_path = os.path.join(FRAME_FOLDER, frame_filename)
-            cv2.imwrite(frame_path, frame)
-            frames_list.append(frame_filename)
-        frame_count += 1
+    frame_index = 0
+
+    with ThreadPoolExecutor() as executor:
+        future_to_frame = {}
+
+        while True:
+            success, frame = cap.read()
+            if not success:
+                break
+            if frame_count % frame_interval == 0:
+                frame_filename = f"{frame_index:06d}_{uuid.uuid4().hex}.jpg"  # Use zero-padded index
+                frame_path = os.path.join(FRAME_FOLDER, frame_filename)
+                
+                # Save frame number to maintain order
+                future = executor.submit(save_frame, frame, frame_path)
+                future_to_frame[future] = (frame_index, frame_filename)
+
+                frame_data.append((frame_index, frame_filename))
+                frame_index += 1
+
+            frame_count += 1
+
+        # Ensure all threads complete
+        for future in future_to_frame:
+            future.result()
 
     cap.release()
+
+    # Sort by frame index to ensure order
+    frames_list = [frame_filename for _, frame_filename in sorted(frame_data, key=lambda x: x[0])]
+    
     return frames_list
 
-def upload_frames_to_gcs(frames_list):
-    """Upload extracted frames to Google Cloud Storage."""
-    uploaded_frames = []
+
+def upload_frame_to_gcs(frame_filename):
+    """Upload a single frame to GCS and return the public URL."""
     try:
         bucket = storage_client.bucket(BUCKET_NAME)
-        for frame_filename in frames_list:
-            frame_path = os.path.join(FRAME_FOLDER, frame_filename)
-            blob = bucket.blob(frame_filename)
-            blob.upload_from_filename(frame_path)
-            blob.make_public()
-            uploaded_frames.append(blob.public_url)
-            os.remove(frame_path)  # Clean up local frame file
-        return uploaded_frames
+        blob = bucket.blob(frame_filename)
+        frame_path = os.path.join(FRAME_FOLDER, frame_filename)
+        blob.upload_from_filename(frame_path)
+        blob.make_public()
+        os.remove(frame_path)  # Clean up
+        return blob.public_url
     except Exception as e:
         return None
+
+def upload_frames_to_gcs(frames_list):
+    """Upload frames using multi-threading."""
+    uploaded_frames = []
+    with ThreadPoolExecutor() as executor:
+        results = executor.map(upload_frame_to_gcs, frames_list)
+        uploaded_frames = [url for url in results if url]
+
+    return uploaded_frames if uploaded_frames else None
 
 @app.route('/extract-frames', methods=['POST'])
 def extract_video_frames():
@@ -108,4 +144,4 @@ def extract_video_frames():
     }), 200
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080)
+    app.run(host='0.0.0.0', port=8080, threaded=True)

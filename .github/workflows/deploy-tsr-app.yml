@@ -38,16 +38,19 @@ jobs:
       - name: Configure Docker for GCP Artifact Registry
         run: gcloud auth configure-docker us-central1-docker.pkg.dev
 
+      - name: make .env file
+        run: |
+          echo "MONGODB_URI=$MONGODB_URI" > tsr-app/.env
+          echo "NEXTAUTH_SECRET=$NEXTAUTH_SECRET" >> tsr-app/.env
+          echo "AUTH_GITHUB_ID=$AUTH_GITHUB_ID" >> tsr-app/.env
+          echo "AUTH_GITHUB_SECRET=$AUTH_GITHUB_SECRET" >> tsr-app/.env
+
       - name: Build and Push Docker Image
         run: |
           cd tsr-app
           docker buildx build --cache-from=type=registry,ref=$FULL_IMAGE_NAME \
                               --cache-to=type=inline \
                               -t $FULL_IMAGE_NAME . \
-                              --build-arg MONGODB_URI=$MONGODB_URI \
-                              --build-arg NEXTAUTH_SECRET=$NEXTAUTH_SECRET \
-                              --build-arg AUTH_GITHUB_ID=$AUTH_GITHUB_ID \
-                              --build-arg AUTH_GITHUB_SECRET=$AUTH_GITHUB_SECRET \
                               --push
 
       - name: Deploy to Cloud Run
@@ -56,6 +59,4 @@ jobs:
             --image $FULL_IMAGE_NAME \
             --platform managed \
             --region us-central1 \
-            --allow-unauthenticated \
-            --set-env-vars MONGODB_URI="$MONGODB_URI",NEXTAUTH_SECRET="$NEXTAUTH_SECRET",AUTH_GITHUB_ID="$AUTH_GITHUB_ID",AUTH_GITHUB_SECRET="$AUTH_GITHUB_SECRET"
-
+            --allow-unauthenticated 

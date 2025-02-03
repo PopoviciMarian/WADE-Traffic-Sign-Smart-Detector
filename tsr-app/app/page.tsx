@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react"
 import { redirect } from "next/navigation"
 import { useState, useEffect } from "react"
 import type { Video } from "@/models/Video"
+import { SkeletonVideoGrid } from "@/components/skeleton-video-grid"
 
 export default function Dashboard() {
   const { data: session, status } = useSession({
@@ -54,7 +55,13 @@ export default function Dashboard() {
   }
 
   if (status === "loading" || loading) {
-    return <div>Loading...</div>
+    return (
+      <div className="p-6 space-y-6">
+      <UploadArea onClose={reloadVideos} />
+      <h1 className="text-2xl font-bold">My Videos</h1>
+      <SkeletonVideoGrid />
+    </div>
+    )
   }
 
   return (

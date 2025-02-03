@@ -5,6 +5,7 @@ import { redirect } from "next/navigation"
 import { VideoGrid } from "@/components/video-grid"
 import { useState, useEffect } from "react"
 import type { Video } from "@/models/Video"
+import { SkeletonVideoGrid } from "@/components/skeleton-video-grid"
 
 export default function SharedPage() {
   const { data: session, status } = useSession({
@@ -33,7 +34,12 @@ export default function SharedPage() {
   }, [status])
 
   if (status === "loading" || loading) {
-    return <div>Loading...</div>
+    return (
+      <div className="p-6 space-y-6">
+      <h1 className="text-2xl font-bold">Shared Videos</h1>
+      <SkeletonVideoGrid />
+    </div>
+    )
   }
 
   return (

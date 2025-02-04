@@ -27,8 +27,6 @@ const signDetection = async (frameUrl: string) => {
   
   const frameId = frameUrl.split("/").pop()
   const URL = process.env.NEXT_PUBLIC_VIDEO_SIGN_DETECTION_SERVICE_URL ?? ""
-  console.log("Frame ID", frameId)
-  console.log("URL", URL)
   const response = await fetch(URL, {
     method: "POST",
     headers: {
@@ -55,27 +53,11 @@ export async function processVideo(videoId: string, fps: number) {
   try {
     const start = Date.now()
     
-    console.log(`[${videoId}] - Processing video with ${fps} FPS started at ${start.toString()}`)
     const frames = await getFrames(videoId, fps)
     const splitInFramesTime = Date.now() - start;
-    console.log(`[${videoId}] - Extracted ${frames.length} frames in ${splitInFramesTime}ms`)
     const detections = await Promise.all(frames.map((frame: string) => signDetection(frame)))
     const detectionsTime = Date.now() - start - splitInFramesTime;
-    console.log(`[${videoId}] - Detected signs in ${frames.length} frames in ${detectionsTime}ms`)
 
-    // const frameData = frames.map((frame, index) => {
-    //   return {
-    //     url: frame,
-    //     videoId,
-    //     index,
-    //     detections: detections[index].map((detection: any) => {
-    //       return {
-    //         classId: detection.classId,
-    //         point: detection.point,
-    //       } as Detection
-    //     }),
-    //   } as Frame
-    // })
     const frameData = frames.map((frame, index) => {
       return {
         url: frame,

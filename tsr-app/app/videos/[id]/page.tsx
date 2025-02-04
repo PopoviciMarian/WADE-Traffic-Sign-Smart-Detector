@@ -17,7 +17,6 @@ interface VideoPageProps {
 }
 
 const  fetchVideoInfo = async (id: string): Promise<Video> => {
-  console.log("Fetching video info", id)
   const response = await fetch(`/api/videos/${id}/info`)
   if (!response.ok) {
     throw new Error("Failed to fetch video")

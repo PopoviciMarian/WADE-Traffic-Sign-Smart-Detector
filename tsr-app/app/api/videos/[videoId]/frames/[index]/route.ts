@@ -6,9 +6,7 @@ export async function GET(request: Request, { params }: { params: { videoId: str
 
     const videoId = params.videoId
     const index = parseInt(params.index)
-    console.log("Video ID", videoId)
-    console.log("Index", index)
-
+    
     try {
         const client = await clientPromise
         const db = client.db()

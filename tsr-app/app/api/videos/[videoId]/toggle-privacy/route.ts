@@ -14,7 +14,7 @@ export async function POST(req: NextRequest, { params }: { params: { videoId: st
 
     const videoId = params.videoId;
     const { isPublic } = await req.json();
-    console.log(videoId, isPublic)
+    
     if (!videoId || typeof videoId !== "string" || typeof isPublic !== "boolean") {
         return NextResponse.json({ message: "Invalid request" }, { status: 400 })
     }

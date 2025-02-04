@@ -18,9 +18,6 @@ interface UserNavProps {
 
 export function AppBar() {
   const { data: session } = useSession()
-  if (session) {
-    console.log(session.user)
-  }
 
   return (
     <div className="border-b border-yellow-200 dark:border-yellow-800 bg-yellow-100 dark:bg-yellow-900">

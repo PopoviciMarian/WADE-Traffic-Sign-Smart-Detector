@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Technical Report: Traffic Sign Recognition (TSR) System</title>
+  <style>
+    body {
+      font-family: Georgia, "Times New Roman", Times, serif;
+      margin: 2em;
+      line-height: 1.6;
+    }
+    header, section, footer {
+      margin-bottom: 2em;
+    }
+    header h1 {
+      font-size: 2em;
+      margin-bottom: 0.5em;
+    }
+    header h2 {
+      font-size: 1.25em;
+      margin-top: 0;
+      font-style: italic;
+    }
+    nav.toc {
+      margin-bottom: 2em;
+    }
+    nav.toc ul {
+      list-style-type: none;
+      padding-left: 0;
+    }
+    nav.toc li {
+      margin-bottom: 0.5em;
+    }
+    code {
+      background-color: #f7f7f7;
+      padding: 0.2em 0.4em;
+      border-radius: 3px;
+      font-family: Consolas, "Courier New", Courier, monospace;
+    }
+    blockquote {
+      margin: 1em 2em;
+      font-style: italic;
+      color: #555;
+    }
+    pre {
+      background: #f7f7f7;
+      padding: 1em;
+      border-radius: 5px;
+      overflow: auto;
+    }
+    footer {
+      border-top: 1px solid #ccc;
+      padding-top: 1em;
+      color: #555;
+      font-size: 0.9em;
+    }
+    .reference-list {
+      list-style: none;
+      padding-left: 0;
+    }
+    .reference-list li {
+      margin-bottom: 0.5em;
+    }
+    table {
+      border-collapse: collapse;
+      margin: 1em 0;
+      width: 100%;
+    }
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+    th, td {
+      padding: 0.8em;
+      text-align: left;
+    }
+    th {
+      background-color: #f7f7f7;
+    }
+  </style>
+</head>
+
+<body>
+<header>
+  <h1>Traffic Sign Recognition (TSR) System</h1>
+  <h2>A Technical Report</h2>
+  <p>
+    <strong>Authors:</strong> Project Team &nbsp;| &nbsp;
+    <strong>Date:</strong> 2025-02-04
+  </p>
+</header>
+
+<nav class="toc">
+  <h3>Table of Contents</h3>
+  <ul>
+    <li><a href="#abstract">Abstract</a></li>
+    <li><a href="#intro">1. Introduction</a></li>
+    <li><a href="#arch">2. System Architecture</a></li>
+    <li><a href="#services">3. Microservices Overview</a></li>
+    <li><a href="#knowledge-graph">4. Knowledge Graph Integration</a></li>
+    <li><a href="#frontend">5. Next.js Frontend</a></li>
+    <li><a href="#infrastructure">6. Infrastructure and Scaling</a></li>
+    <li><a href="#deployment">7. Deployment Workflows</a></li>
+    <li><a href="#conclusion">8. Conclusion</a></li>
+    <li><a href="#references">References</a></li>
+  </ul>
+</nav>
+
+<section id="abstract">
+  <h2>Abstract</h2>
+  <p>
+    This document presents a technical overview of a cloud-based Traffic Sign Recognition (TSR) system. The system automates the process of uploading videos, extracting frames, detecting traffic signs, and integrating those signs with a semantic knowledge graph. It is deployed using Google Cloud Run and Google Artifact Registry, with microservices communicating over REST. MongoDB Atlas is used for metadata storage, and Blazegraph serves as the semantic store for ontological data. The system leverages Docker, GitHub Actions, Terraform, and Next.js for CI/CD, infrastructure provisioning, and user interface development.
+  </p>
+</section>
+
+<section id="intro">
+  <h2>1. Introduction</h2>
+  <p>
+    The proliferation of autonomous systems has led to a growing need for robust, accurate, and scalable traffic sign recognition tools. This system aims to provide a flexible, modular, and cloud-native approach to processing video inputs and detecting, classifying, and analyzing traffic signs. The key objectives include:
+  </p>
+  <ul>
+    <li>Providing a microservices-based solution that is easily maintainable, extensible, and robust against failures.</li>
+    <li>Ensuring accurate and efficient recognition of traffic signs using both classical (OpenCV) and deep learning–based (ONNX) techniques.</li>
+    <li>Enhancing semantic understanding by linking recognized signs to a knowledge graph via an RDF-based ontology.</li>
+    <li>Automating build, deployment, and scaling using GitHub Actions, Docker, and Google Cloud.</li>
+  </ul>
+  <p>
+    This document highlights design decisions, data structures, core service capabilities, and deployment strategies that collectively form a reliable Traffic Sign Recognition (TSR) pipeline.
+  </p>
+</section>
+
+<section id="arch">
+  <h2>2. System Architecture</h2>
+  <p>
+    The TSR system is composed of five core services, each with a single responsibility, and a Next.js web application for user interaction:
+  </p>
+  <ol>
+    <li>Video Ingestion Service</li>
+    <li>Frame Extraction Service</li>
+    <li>Sign Detection Service</li>
+    <li>Ontology Service</li>
+    <li>TSR Frontend App (Next.js)</li>
+  </ol>
+
+  <p>
+    The architecture follows a publish–subscribe style of data flow:
+  </p>
+  <ul>
+    <li>Users upload videos through the Frontend App; these videos are stored in Google Cloud Storage (GCS) by the Video Ingestion Service.</li>
+    <li>The Frame Extraction Service retrieves videos from GCS and generates frames at configurable intervals.</li>
+    <li>The Sign Detection Service uses the extracted frames to detect and classify traffic signs. Detected signs and their metadata are stored in MongoDB Atlas.</li>
+    <li>The Ontology Service integrates the recognized signs with an RDF-based knowledge graph (Blazegraph), augmenting sign data with semantic information.</li>
+    <li>The Frontend App queries these services to display results and manage user interactions (e.g., share videos, toggle privacy).</li>
+  </ul>
+  <p>
+    This modular design enables independent development, testing, and scaling of each service. Automated CI/CD pipelines ensure seamless updates to production environments on Google Cloud Run.
+  </p>
+</section>
+
+<section id="services">
+  <h2>3. Microservices Overview</h2>
+
+  <h3>3.1 Video Ingestion Service</h3>
+  <p>
+    <strong>File:</strong> <code>video_ingestion_service/main.py</code><br/>
+    <strong>API Endpoint:</strong> <code>/upload</code> (<code>POST</code>)<br/>
+    <strong>Description:</strong> This service handles the uploading of video files to GCS. It also generates a random thumbnail by extracting a random frame (to provide a quick preview).  
+  </p>
+  <blockquote>
+    <strong>Key Data Structures:</strong>
+    <ul>
+      <li><code>UPLOAD_FOLDER</code>: Temporary local directory for storing videos before uploading to GCS.</li>
+      <li><code>BUCKET_NAME</code>: Name of the GCS bucket.</li>
+    </ul>
+  </blockquote>
+  <p>
+    The service performs the following major steps:
+  </p>
+  <ol>
+    <li>Receives an uploaded video file from the client.</li>
+    <li>Saves the video to <code>UPLOAD_FOLDER</code>.</li>
+    <li>Uploads the video to <code>BUCKET_NAME</code> in GCS.</li>
+    <li>Extracts a random frame and uploads the resulting image as a thumbnail.</li>
+    <li>Cleans up local storage to reduce disk usage on Cloud Run.</li>
+  </ol>
+
+  <h3>3.2 Frame Extraction Service</h3>
+  <p>
+    <strong>File:</strong> <code>frame-extraction-service/main.py</code><br/>
+    <strong>API Endpoint:</strong> <code>/extract-frames</code> (<code>POST</code>)<br/>
+    <strong>Description:</strong> Extracts frames from the uploaded videos at a specified frame rate or interval. These frames are then uploaded back to GCS under a designated folder for subsequent sign detection.
+  </p>
+  <blockquote>
+    <strong>Key Data Structures:</strong>
+    <ul>
+      <li><code>FRAME_FOLDER</code>: Directory for temporary storage of extracted frames.</li>
+      <li><code>frames_list</code>: List of filenames corresponding to the extracted frames.</li>
+    </ul>
+  </blockquote>
+  <p>
+    The service allows clients to specify the desired frame rate. For instance, extracting 1 frame per second (fps) reduces storage overhead while capturing enough frames for sign detection. The actual extraction process uses OpenCV's <code>cv2.VideoCapture</code> and <code>cv2.imwrite</code> to create JPEG images. Once extracted, frames are stored in GCS and can be deleted locally.
+  </p>
+
+  <h3>3.3 Sign Detection Service</h3>
+  <p>
+    <strong>File:</strong> <code>sign-detection-service/main.py</code><br/>
+    <strong>API Endpoint:</strong> <code>/detect-signs</code> (<code>POST</code>)<br/>
+    <strong>Description:</strong> Detects and classifies traffic signs within each extracted frame. It uses both OpenCV cascade classifiers for region-of-interest detection and an ONNX-based deep learning model for classification.  
+  </p>
+  <blockquote>
+    <strong>Key Data Structures:</strong>
+    <ul>
+      <li><code>classifiers</code>: A list of Haar-like or LBP cascade classifiers specialized for traffic signs (e.g., red circle, blue circle, red triangle).</li>
+      <li><code>TRANSFORM</code>: PyTorch <code>transforms.Compose</code> used to normalize and resize images prior to classification.</li>
+      <li><code>session</code>: ONNX Runtime session used to execute inference on the deep learning model.</li>
+    </ul>
+  </blockquote>
+  <p>
+    The service outputs bounding box coordinates for each detected sign and a predicted class ID. A mapping dictionary translates model output indices (0, 1, 2, etc.) into semantic sign IDs (e.g., <em>StopSign</em>, <em>YieldSign</em>, etc.). Metadata about detected signs (including location, class, and confidence score) is then saved to MongoDB Atlas.
+  </p>
+  <p>
+    By combining classical and deep learning–based approaches, the service achieves robust detection in various conditions (occlusions, different lighting, or partial signs).
+  </p>
+
+  <h3>3.4 Ontology Service</h3>
+  <p>
+    <strong>File:</strong> <code>ontology-service/main.py</code><br/>
+    <strong>API Endpoint:</strong> <code>/ontology</code> (<code>GET</code>)<br/>
+    <strong>Description:</strong> Fetches semantic information about traffic signs from a Blazegraph triple store (SPARQL endpoint). Returns additional data, such as sign shape, color, category, and parent relationships (e.g., <em>RegulatorySign</em>, <em>WarningSign</em>).
+  </p>
+  <blockquote>
+    <strong>Key Data Structures:</strong>
+    <ul>
+      <li><code>SPARQL_ENDPOINT</code>: The Blazegraph endpoint URL.</li>
+      <li><code>query</code>: Parameterized SPARQL query to retrieve data based on <code>sign_id</code> and <code>lang</code>.</li>
+    </ul>
+  </blockquote>
+  <p>
+    The ontology (<code>ontology.owl</code>) models traffic sign classes and their properties (name, description, color, shape, etc.). The service can optionally link to external data sources (Wikidata, DBpedia) for extra knowledge, consistent with Linked Data principles.
+  </p>
+
+  <h3>3.5 TSR Frontend App</h3>
+  <p>
+    <strong>Directory:</strong> <code>tsr-app/</code><br/>
+    <strong>Description:</strong> A Next.js application that provides a user-friendly dashboard where end-users can:
+  </p>
+  <ul>
+    <li>Authenticate with GitHub OAuth to manage personal data and sessions.</li>
+    <li>Upload videos and monitor their processing status.</li>
+    <li>View recognized traffic signs frame by frame.</li>
+    <li>Share videos with other users and toggle video privacy settings.</li>
+    <li>Search through videos (public, shared, and personal) with metadata queries.</li>
+  </ul>
+</section>
+
+<section id="knowledge-graph">
+  <h2>4. Knowledge Graph Integration</h2>
+  <p>
+    The TSR system leverages Blazegraph for storing an <em>RDF-based ontology</em> that describes traffic signs using well-defined classes and properties. By using the SPARQL endpoint, the system can retrieve and augment recognized signs with semantic information:
+  </p>
+  <pre><code>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX traffic: <http://example.org/traffic-signs#>
+
+SELECT DISTINCT ?name ?description ?color ?shape ?id ?superclass
+WHERE {
+  ?sign traffic:name ?name .
+  ?sign traffic:description ?description .
+  ?sign traffic:color ?color .
+  ?sign traffic:shape ?shape .
+  ?sign traffic:id ?id .
+  OPTIONAL { ?sign rdfs:subClassOf ?superclass . }
+  FILTER(str(?id) = "{sign_id}")
+  FILTER(LANG(?name) = "{lang}" && LANG(?description) = "{lang}" &&
+         LANG(?color) = "{lang}" && LANG(?shape) = "{lang}")
+}
+LIMIT 1
+  </code></pre>
+  <p>
+    This integration not only improves the interpretability of sign detection results, but also enables advanced querying, inference, and semantic linking. The ontology can be extended to integrate with external knowledge sources like Wikidata or DBpedia, broadening the system’s ability to answer non-trivial queries (e.g., searching for signs by region, or retrieving regulatory standards).
+  </p>
+</section>
+
+<section id="frontend">
+  <h2>5. Next.js Frontend</h2>
+  <p>
+    The <code>tsr-app</code> directory contains the Next.js web application. Key files include:
+  </p>
+  <ul>
+    <li><code>app/api/auth/[...nextauth]/route.ts</code>: Handles GitHub OAuth authentication via NextAuth.js.</li>
+    <li><code>app/api/videos/route.ts</code>: Defines endpoints for uploading and fetching videos, including filtering by <em>public</em>, <em>shared</em>, or <em>my</em> modes.</li>
+    <li><code>app/actions/process-video.ts</code>: Contains the <code>processVideo</code> function orchestrating frame extraction and sign detection. This function interacts with the Frame Extraction and Sign Detection microservices, then updates MongoDB Atlas with detection results.</li>
+    <li><code>app/page.tsx</code>: The main dashboard page, providing an overview of videos uploaded by the user.</li>
+    <li><code>components/frame-player.tsx</code>: Displays frames along with bounding boxes around detected signs.</li>
+  </ul>
+  <p>
+    Through these components, users can:
+  </p>
+  <ul>
+    <li>Log in or out using the GitHub OAuth flow.</li>
+    <li>Upload new videos and see them appear in their personal dashboard.</li>
+    <li>Click on a video to inspect individual frames, along with detected traffic signs.</li>
+    <li>Toggle privacy settings or share a video with other users.</li>
+  </ul>
+</section>
+
+<section id="infrastructure">
+  <h2>6. Infrastructure and Scaling</h2>
+  <p>
+    The system's infrastructure is defined using Terraform, which automates the creation and configuration of:
+  </p>
+  <ul>
+    <li>Google Cloud Storage bucket for storing videos and frames.</li>
+    <li>Google Artifact Registry repository for Docker images.</li>
+    <li>Google Cloud Run services for each microservice and the frontend app.</li>
+    <li>IAM policies that allow public invocation of Cloud Run services where necessary.</li>
+  </ul>
+  <p>
+    <strong>Autoscaling and Concurrency:</strong> Each Cloud Run service is configured with autoscaling parameters (e.g., <code>autoscaling.knative.dev/maxScale</code>) and concurrency settings (e.g., <code>autoscaling.knative.dev/concurrency</code>), ensuring the services can handle usage spikes:
+  </p>
+  <table>
+    <thead>
+      <tr>
+        <th>Service</th>
+        <th>Min Instances</th>
+        <th>Max Instances</th>
+        <th>Concurrency</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Video Ingestion Service</td>
+        <td>0</td>
+        <td>3</td>
+        <td>80</td>
+      </tr>
+      <tr>
+        <td>Frame Extraction Service</td>
+        <td>0</td>
+        <td>3</td>
+        <td>80</td>
+      </tr>
+      <tr>
+        <td>Sign Detection Service</td>
+        <td>1</td>
+        <td>3</td>
+        <td>80</td>
+      </tr>
+      <tr>
+        <td>Ontology Service</td>
+        <td>0</td>
+        <td>2</td>
+        <td>80</td>
+      </tr>
+      <tr>
+        <td>TSR Frontend App</td>
+        <td>0</td>
+        <td>3</td>
+        <td>80</td>
+      </tr>
+    </tbody>
+  </table>
+  <p>
+    By adjusting these parameters, developers can optimize both performance and cost. For instance, the Sign Detection Service has <code>minScale=1</code> to ensure rapid cold-start performance, given its heavier computation load.
+  </p>
+  <p>
+    MongoDB Atlas hosts the system’s metadata for videos, frames, and detection records. Indexing on fields such as <code>videoId</code> and <code>userId</code> ensures efficient queries and retrieval for the Next.js frontend. Blazegraph is used as a semantic graph store, hosting the RDF ontology and related data.
+  </p>
+</section>
+
+<section id="deployment">
+  <h2>7. Deployment Workflows</h2>
+  <p>
+    This repository leverages GitHub Actions for CI/CD, with individual workflows located in <code>.github/workflows</code>. Each microservice (and the <code>tsr-app</code>) has its own dedicated workflow that includes:
+  </p>
+  <ol>
+    <li><strong>Trigger Conditions:</strong> The workflow triggers on a <code>push</code> event to specific branches or paths, ensuring that only relevant changes initiate a build and deploy.</li>
+    <li><strong>Authentication to Google Cloud:</strong> Using a service account key stored as a GitHub secret.</li>
+    <li><strong>Docker Build &amp; Push:</strong> Building the Docker image with <code>docker buildx</code> and pushing to a Google Artifact Registry repo (<code>us-central1-docker.pkg.dev</code>).</li>
+    <li><strong>Cloud Run Deployment:</strong> Running <code>gcloud run deploy</code> to update the service image, region, and IAM policies.</li>
+  </ol>
+  <p>
+    Below is an excerpt from a typical deployment workflow (<code>deploy-frame-extraction-service.yml</code>):
+  </p>
+  <pre><code>
+name: Deploy Frame Extraction Service to GCP
+
+on:
+  push:
+    branches:
+      - frame-extraction-service
+      - main
+    paths:
+      - 'frame-extraction-service/**'
+      - '.github/workflows/deploy-frame-extraction-service.yml'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Configure Docker to use GCP Artifact Registry
+        run: gcloud auth configure-docker us-central1-docker.pkg.dev
+
+      - name: Build and Push Docker Image
+        run: |
+          cd frame-extraction-service
+          docker buildx build --cache-from=type=registry,ref=$FULL_IMAGE_NAME \
+                              --cache-to=type=inline \
+                              -t $FULL_IMAGE_NAME . \
+                              --push
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy frame-extraction-service \
+            --image $FULL_IMAGE_NAME \
+            --platform managed \
+            --region us-central1 \
+            --allow-unauthenticated
+  </code></pre>
+  <p>
+    Similar workflows exist for the other services (<code>video-ingestion-service</code>, <code>sign-detection-service</code>, <code>ontology-service</code>, and the <code>tsr-app</code>). These straightforward pipelines foster a consistent and repeatable deployment process.
+  </p>
+</section>
+
+<section id="conclusion">
+  <h2>8. Conclusion</h2>
+  <p>
+    The presented Traffic Sign Recognition (TSR) system showcases a modern, scalable approach to processing video data for object detection and semantic enrichment. By leveraging Google Cloud Run for containerized deployments, MongoDB Atlas for metadata storage, and a Blazegraph-backed ontology for knowledge representation, the system fulfills the following key requirements:
+  </p>
+  <ul>
+    <li>End-to-end automation of video handling, frame extraction, sign detection, and semantic linking.</li>
+    <li>Modularity through a microservices design, allowing independent development and scaling.</li>
+    <li>Streamlined CI/CD using GitHub Actions, ensuring consistent deployment to production.</li>
+    <li>Enhanced semantic interpretation through RDF-based knowledge graphs and SPARQL queries.</li>
+  </ul>
+  <p>
+    Future enhancements might include:
+  </p>
+  <ul>
+    <li>Integrating advanced deep learning models (e.g., YOLOv8 or transformers) for more robust sign detection.</li>
+    <li>Expanding the ontology with localized sign variations (based on region or country).</li>
+    <li>Linking to external data sources, such as Wikidata, DBpedia, or national traffic regulatory databases.</li>
+    <li>Implementing a real-time streaming pipeline for live video feeds (e.g., from dashcams or CCTV).</li>
+  </ul>
+  <p>
+    Overall, the TSR system serves as a compelling demonstration of integrating computer vision, semantic web technologies, and cloud-native microservices to deliver an end-to-end traffic sign recognition and analytics platform.
+  </p>
+</section>
+
+<footer>
+  <h2 id="references">References</h2>
+  <ul class="reference-list">
+    <li>
+      [1] M. Everingham, L. Van Gool, C.K.I. Williams, J. Winn, and A. Zisserman.
+      "The PASCAL Visual Object Classes (VOC) Challenge."
+      <em>International Journal of Computer Vision</em>, 88(2):303–338, 2010.
+    </li>
+    <li>
+      [2] S. M. A. Burney, K. Mahmood, and M. Abbas.
+      "A Survey of Ontology Learning Techniques and Applications."
+      <em>The Knowledge Engineering Review</em>, 30(2):187–209, 2015.
+    </li>
+    <li>
+      [3] Google Cloud Documentation: 
+      <a href="https://cloud.google.com/run/docs" target="_blank">Cloud Run</a>, 
+      <a href="https://cloud.google.com/artifact-registry/docs" target="_blank">Artifact Registry</a>, 
+      <a href="https://cloud.google.com/storage/docs" target="_blank">Cloud Storage</a>.
+    </li>
+    <li>
+      [4] MongoDB Atlas Documentation:
+      <a href="https://docs.atlas.mongodb.com/" target="_blank">docs.atlas.mongodb.com</a>.
+    </li>
+    <li>
+      [5] Blazegraph Documentation:
+      <a href="https://blazegraph.com/" target="_blank">blazegraph.com</a>.
+    </li>
+  </ul>
+  <p>
+    © 2025 TSR Project Team. This report is licensed under the MIT License.
+  </p>
+</footer>
+
+</body>
+</html>

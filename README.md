@@ -1,5 +1,11 @@
 # Traffic Sign Recognition System
 
+## 🎥 Demo Video
+Watch the **video demo** of the system [here](https://youtu.be/Z80mgwopfkQ).
+
+## 🌍 Live Application
+Access the live application: **[TSR Web App](https://tsr-app-1003028948668.us-central1.run.app/)**
+
 ## 📌 Project Overview
 The **Traffic Sign Recognition (TSR) System** is a cloud-based solution for detecting, classifying, and analyzing traffic signs from uploaded videos. The system extracts frames from videos, applies machine learning models for sign recognition, and integrates with a knowledge graph for enhanced semantic understanding.
 

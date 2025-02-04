@@ -26,9 +26,9 @@ classifiers = [
     cv2.CascadeClassifier( os.path.join(os.path.dirname(__file__), 'classifiers' , 'slashes-cascade.xml') )
 ]
 TRANSFORM = transforms.Compose([
-    transforms.Resize((32,32)),  # Resize to model input size
+    transforms.Resize((32,32), interpolation=Image.NEAREST),  # Resize to model input size
     transforms.ToTensor(),  # Convert to Tensor (H, W, C) → (C, H, W)
-    transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])  # Normalize
+    transforms.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])  # Normalize
 ])
 
 session = ort.InferenceSession(os.path.join(os.path.dirname(__file__), "classifiers" ,"TSR_classification_model.onnx"))
@@ -45,7 +45,7 @@ def detect_signs(frame):
     img_gray=cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
     result=[]
     for i in range(4):
-        rectangles,reject,weights=classifiers[i].detectMultiScale3(img_gray, 1.1,5,outputRejectLevels=True,minSize=(35,35))
+        rectangles,reject,weights=classifiers[i].detectMultiScale3(img_gray, 1.1,5,outputRejectLevels=True,minSize=(45,45))
         for ind,rect in enumerate(rectangles):
             if abs(weights[ind])<0.9:
                 continue

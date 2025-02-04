@@ -44,8 +44,8 @@ def detect_signs(frame):
     """
     img_gray=cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
     result=[]
-    for i in range(4):
-        rectangles,reject,weights=classifiers[i].detectMultiScale3(img_gray, 1.1,5,outputRejectLevels=True,minSize=(35,35))
+    for i in range(1,4):
+        rectangles,reject,weights=classifiers[i].detectMultiScale3(img_gray, 1.1,5,outputRejectLevels=True,minSize=(60,60))
         for ind,rect in enumerate(rectangles):
             if abs(weights[ind])<0.9:
                 continue

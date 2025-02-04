@@ -661,8 +661,8 @@
     <traffic:color xml:lang="ro">fundal albastru, săgeți albe</traffic:color>
     <traffic:shape xml:lang="en">Circle</traffic:shape>
     <traffic:shape xml:lang="ro">Cerc</traffic:shape>
-    <traffic:id xml:lang="en">39</traffic:id>
-    <traffic:id xml:lang="ro">39</traffic:id>
+    <traffic:id xml:lang="en">40</traffic:id>
+    <traffic:id xml:lang="ro">40</traffic:id>
 </traffic:RoundaboutMandatory>
 <traffic:EndOfNoOvertaking rdf:about="http://example.org/traffic-signs#EndOfNoOvertaking">
     <traffic:name xml:lang="en">End of No Overtaking</traffic:name>
@@ -673,8 +673,8 @@
     <traffic:color xml:lang="ro">fundal alb, linii diagonale negre peste simboluri</traffic:color>
     <traffic:shape xml:lang="en">Circle</traffic:shape>
     <traffic:shape xml:lang="ro">Cerc</traffic:shape>
-    <traffic:id xml:lang="en">40</traffic:id>
-    <traffic:id xml:lang="ro">40</traffic:id>
+    <traffic:id xml:lang="en">41</traffic:id>
+    <traffic:id xml:lang="ro">41</traffic:id>
 </traffic:EndOfNoOvertaking>
 <traffic:EndOfSpeedLimit80 rdf:about="http://example.org/traffic-signs#EndOfSpeedLimit80">
     <traffic:name xml:lang="en">End of Speed Limit 80</traffic:name>
@@ -686,8 +686,8 @@
     <traffic:color xml:lang="ro">fundal alb, linii diagonale negre</traffic:color>
     <traffic:shape xml:lang="en">Circle</traffic:shape>
     <traffic:shape xml:lang="ro">Cerc</traffic:shape>
-    <traffic:id xml:lang="en">41</traffic:id>
-    <traffic:id xml:lang="ro">41</traffic:id>
+    <traffic:id xml:lang="en">6</traffic:id>
+    <traffic:id xml:lang="ro">6</traffic:id>
 </traffic:EndOfSpeedLimit80>
 <traffic:EndOfNoOvertakingForHeavyVehicles rdf:about="http://example.org/traffic-signs#EndOfNoOvertakingForHeavyVehicles">
     <traffic:name xml:lang="en">End of No Overtaking for Heavy Vehicles</traffic:name>

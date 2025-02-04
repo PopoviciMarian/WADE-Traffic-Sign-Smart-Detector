@@ -20,6 +20,9 @@ The system follows a **microservices-based architecture** deployed on **Google C
 ### 🔹 **Database Schema**
 
 ![Database Schema](images/db.png)
+### 🔹 **Ontology Graph**
+
+![Ontology Graph](images/ontology.png)
 ### 🔹 **Cloud Services**
 1. **Google Cloud Storage (GCS):** Stores uploaded videos and extracted frames.
 2. **Google Cloud Run:** Runs various microservices for processing and analysis.

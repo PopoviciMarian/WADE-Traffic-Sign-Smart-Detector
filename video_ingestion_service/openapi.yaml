@@ -1,0 +1,75 @@
+openapi: 3.0.0
+info:
+  title: Video Upload API
+  description: API for uploading videos and extracting random thumbnail images.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+
+paths:
+  /upload:
+    post:
+      summary: Upload a video and extract a thumbnail
+      description: Accepts a video file, uploads it to Google Cloud Storage, and extracts a random frame as a thumbnail.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: The video file to be uploaded.
+      responses:
+        '200':
+          description: File uploaded successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "File uploaded successfully"
+                  file_url:
+                    type: string
+                    example: "https://storage.googleapis.com/bucket-name/video.mp4"
+                  unique_filename:
+                    type: string
+                    example: "abcd1234.mp4"
+                  thumbnail_url:
+                    type: string
+                    nullable: true
+                    example: "https://storage.googleapis.com/bucket-name/thumbnail.jpg"
+        '400':
+          description: Bad request, missing or invalid file
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "No file selected for uploading"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "An error occurred while uploading the file"
+
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string

@@ -1,0 +1,91 @@
+openapi: 3.0.0
+info:
+  title: Traffic Sign Detection API
+  description: API for detecting and classifying traffic signs in images.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+
+paths:
+  /detect-signs:
+    post:
+      summary: Detect and classify traffic signs
+      description: Processes an image frame to detect traffic signs and classify them.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - frame_id
+              properties:
+                frame_id:
+                  type: string
+                  description: The unique identifier of the image frame stored in Google Cloud Storage.
+      responses:
+        '200':
+          description: Successful detection and classification
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detections:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        point:
+                          type: object
+                          properties:
+                            x1:
+                              type: integer
+                            y1:
+                              type: integer
+                            x2:
+                              type: integer
+                            y2:
+                              type: integer
+                        classId:
+                          type: integer
+        '400':
+          description: Bad request, missing required parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "frame_id is required"
+        '404':
+          description: Frame not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Frame not found for id:{frame_id}"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "An error occurred during detection"
+
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string

@@ -1,0 +1,87 @@
+openapi: 3.0.0
+info:
+  title: Traffic Sign Ontology API
+  description: API for retrieving traffic sign information from an ontology using SPARQL.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+
+paths:
+  /ontology:
+    get:
+      summary: Retrieve traffic sign information
+      description: Queries a SPARQL endpoint to fetch traffic sign details based on an ID.
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: string
+          description: The unique identifier of the traffic sign.
+        - name: lang
+          in: query
+          required: false
+          schema:
+            type: string
+            default: en
+          description: The language code for the response data.
+      responses:
+        '200':
+          description: Traffic sign information retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  description:
+                    type: string
+                  color:
+                    type: string
+                  shape:
+                    type: string
+                  id:
+                    type: string
+                  type:
+                    type: string
+        '400':
+          description: Bad request, missing required parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Missing required parameter 'id'"
+        '404':
+          description: No results found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "No results found"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "An error occurred while querying the SPARQL endpoint"
+
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string

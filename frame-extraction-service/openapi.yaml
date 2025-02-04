@@ -1,0 +1,76 @@
+openapi: 3.0.0
+info:
+  title: Video Frame Extraction API
+  description: API for extracting frames from videos stored in Google Cloud Storage.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+
+paths:
+  /extract-frames:
+    post:
+      summary: Extract frames from a video
+      description: Downloads a video from Google Cloud Storage, extracts frames at a specified rate, and uploads the frames back to GCS.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - unique_filename
+              properties:
+                unique_filename:
+                  type: string
+                  description: The unique filename of the video stored in Google Cloud Storage.
+                frame_rate:
+                  type: integer
+                  default: 1
+                  minimum: 1
+                  description: The number of frames to extract per second.
+      responses:
+        '200':
+          description: Frames extracted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Frames extracted successfully"
+                  frames:
+                    type: array
+                    items:
+                      type: string
+                    example: ["https://storage.googleapis.com/bucket-name/frame1.jpg", "https://storage.googleapis.com/bucket-name/frame2.jpg"]
+        '400':
+          description: Bad request, missing or invalid parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Missing unique_filename"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Failed to extract frames"
+
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string

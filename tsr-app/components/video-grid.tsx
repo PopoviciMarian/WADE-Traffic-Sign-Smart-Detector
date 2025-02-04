@@ -66,11 +66,7 @@ export function VideoGrid({ videos, isMyVideos = false }: VideoGridProps) {
       <div className="flex flex-col items-center justify-center h-64 text-center">
         <Upload className="w-16 h-16 text-gray-400 mb-4" />
         <p className="text-xl font-semibold mb-2">{emptyStateMessage}</p>
-        {isMyVideos && (
-          <Button asChild>
-            <Link href="/">{t("upload.title")}</Link>
-          </Button>
-        )}
+       
       </div>
     )
   }

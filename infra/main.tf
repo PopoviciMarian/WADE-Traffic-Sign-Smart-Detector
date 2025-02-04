@@ -84,8 +84,8 @@ resource "google_cloud_run_service" "frame-extraction-service" {
 }
 
 resource "google_cloud_run_service_iam_policy" "noauth2" {
-  location = google_cloud_run_service.video_ingestion_service.location
-  service  = google_cloud_run_service.video_ingestion_service.name
+  location = google_cloud_run_service.frame-extraction-service.location
+  service  = google_cloud_run_service.frame-extraction-service.name
   
 
   policy_data = data.google_iam_policy.noauth.policy_data
@@ -142,8 +142,8 @@ resource "google_cloud_run_service" "sign-detection-service" {
 
     metadata {
       annotations = {
-        "autoscaling.knative.dev/minScale" = "3"     # Keep 1 instance always running (optional)
-        "autoscaling.knative.dev/maxScale" = "5"   # Allow up to 100 instances
+        "autoscaling.knative.dev/minScale" = "1"     # Keep 1 instance always running (optional)
+        "autoscaling.knative.dev/maxScale" = "3"  
         "autoscaling.knative.dev/concurrency" = "80" # Each instance can handle 80 requests
       }
     }
@@ -165,53 +165,6 @@ resource "google_cloud_run_service_iam_policy" "noauth3" {
 }
 
 data "google_iam_policy" "noauth3" {
-  binding {
-    role    = "roles/run.invoker"
-    members = ["allUsers"]
-  }
-}
-
-
-
-
-resource "google_cloud_run_service" "blazegraph" {
-  name     = "blazegraph"
-  location = "us-central1"
-
-  template {
-    spec {
-      containers {
-        image = "lyrasis/blazegraph:2.1.5"
-        ports {
-          container_port = 8080
-        }
-       
-          resources {
-    limits = {
-      memory = "4Gi"
-      cpu    = "2"  # Optional: Adjust CPU allocation if needed
-      }
-  }
-      }
-    }
-  }
-
-  traffic {
-    percent         = 100
-    latest_revision = true
-  }
-  
-}
-
-resource "google_cloud_run_service_iam_policy" "noauth4" {
-  location = google_cloud_run_service.blazegraph.location
-  service  = google_cloud_run_service.blazegraph.name
-  
-
-  policy_data = data.google_iam_policy.noauth.policy_data
-}
-
-data "google_iam_policy" "noauth4" {
   binding {
     role    = "roles/run.invoker"
     members = ["allUsers"]

@@ -6,7 +6,7 @@ env:
 on:
   push:
     branches:
-      - 2-traffic-sign-detection-service
+      - detect_improvement_2
       - main
     paths:
       - 'sign-detection-service/**'
